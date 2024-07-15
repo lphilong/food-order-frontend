@@ -7,11 +7,16 @@ import SearchPage from './pages/SearchPage';
 import DetailPage from './pages/DetailPage';
 import OrderStatusPage from './pages/OrderStatusPage';
 import ManageRestaurantPage from './pages/ManageRestaurantPage';
+import HomePage from './pages/HomePage';
 
 const mRoute = [
     {
         path: '/',
-        element: <Layout showHero>HomePage</Layout>,
+        element: (
+            <Layout showHero>
+                <HomePage></HomePage>
+            </Layout>
+        ),
     },
     {
         path: '/user-profile',
