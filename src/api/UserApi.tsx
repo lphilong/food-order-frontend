@@ -5,13 +5,13 @@ import { toast } from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetUser = () => {
+export const useGetMyUser = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const getUserRequest = async (): Promise<User> => {
+    const getMyUserRequest = async (): Promise<User> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api/user`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/user`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -26,7 +26,7 @@ export const useGetUser = () => {
         return response.json();
     };
 
-    const { data: currentUser, isLoading, error } = useQuery('fetchCurrentUser', getUserRequest);
+    const { data: currentUser, isLoading, error } = useQuery('fetchCurrentUser', getMyUserRequest);
 
     if (error) {
         toast.error(error.toString());
@@ -40,11 +40,12 @@ type CreateUserRequest = {
     email: string;
 };
 
-export const useCreateUser = () => {
+export const useCreateMyUser = () => {
     const { getAccessTokenSilently } = useAuth0();
-    const createUserRequest = async (user: CreateUserRequest) => {
+
+    const createMyUserRequest = async (user: CreateUserRequest) => {
         const accessToken = await getAccessTokenSilently();
-        const response = await fetch(`${API_BASE_URL}/api//user`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/user`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -52,33 +53,41 @@ export const useCreateUser = () => {
             },
             body: JSON.stringify(user),
         });
+
         if (!response.ok) {
             throw new Error('Failed to create user');
         }
     };
+
     const {
         mutateAsync: createUser,
         isLoading,
         isError,
         isSuccess,
-    } = useMutation(createUserRequest);
-    return { createUser, isError, isLoading, isSuccess };
+    } = useMutation(createMyUserRequest);
+
+    return {
+        createUser,
+        isLoading,
+        isError,
+        isSuccess,
+    };
 };
 
-type UpdateUserRequest = {
+type UpdateMyUserRequest = {
     name: string;
     addressLine1: string;
     city: string;
     country: string;
 };
 
-export const useUpdateUser = () => {
+export const useUpdateMyUser = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const updateUserRequest = async (formData: UpdateUserRequest) => {
+    const updateMyUserRequest = async (formData: UpdateMyUserRequest) => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api//user`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/user`, {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -100,7 +109,7 @@ export const useUpdateUser = () => {
         isSuccess,
         error,
         reset,
-    } = useMutation(updateUserRequest);
+    } = useMutation(updateMyUserRequest);
 
     if (isSuccess) {
         toast.success('User profile updated!');

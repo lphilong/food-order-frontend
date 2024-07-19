@@ -5,13 +5,13 @@ import { toast } from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetRestaurant = () => {
+export const useGetMyRestaurant = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const getRestaurantRequest = async (): Promise<Restaurant> => {
+    const getMyRestaurantRequest = async (): Promise<Restaurant> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api//restaurant`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -24,18 +24,18 @@ export const useGetRestaurant = () => {
         return response.json();
     };
 
-    const { data: restaurant, isLoading } = useQuery('fetchRestaurant', getRestaurantRequest);
+    const { data: restaurant, isLoading } = useQuery('fetchMyRestaurant', getMyRestaurantRequest);
 
     return { restaurant, isLoading };
 };
 
-export const useCreateRestaurant = () => {
+export const useCreateMyRestaurant = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const createRestaurantRequest = async (restaurantFormData: FormData): Promise<Restaurant> => {
+    const createMyRestaurantRequest = async (restaurantFormData: FormData): Promise<Restaurant> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api//restaurant`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -55,7 +55,7 @@ export const useCreateRestaurant = () => {
         isLoading,
         isSuccess,
         error,
-    } = useMutation(createRestaurantRequest);
+    } = useMutation(createMyRestaurantRequest);
 
     if (isSuccess) {
         toast.success('Restaurant created!');
@@ -68,13 +68,13 @@ export const useCreateRestaurant = () => {
     return { createRestaurant, isLoading };
 };
 
-export const useUpdateRestaurant = () => {
+export const useUpdateMyRestaurant = () => {
     const { getAccessTokenSilently } = useAuth0();
 
     const updateRestaurantRequest = async (restaurantFormData: FormData): Promise<Restaurant> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api//restaurant`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -107,13 +107,13 @@ export const useUpdateRestaurant = () => {
     return { updateRestaurant, isLoading };
 };
 
-export const useGetRestaurantOrders = () => {
+export const useGetMyRestaurantOrders = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const getRestaurantOrdersRequest = async (): Promise<Order[]> => {
+    const getMyRestaurantOrdersRequest = async (): Promise<Order[]> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api//restaurant/order`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant/order`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -128,8 +128,8 @@ export const useGetRestaurantOrders = () => {
     };
 
     const { data: orders, isLoading } = useQuery(
-        'fetchRestaurantOrders',
-        getRestaurantOrdersRequest,
+        'fetchMyRestaurantOrders',
+        getMyRestaurantOrdersRequest,
     );
 
     return { orders, isLoading };
@@ -140,14 +140,14 @@ type UpdateOrderStatusRequest = {
     status: string;
 };
 
-export const useUpdateRestaurantOrder = () => {
+export const useUpdateMyRestaurantOrder = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const updateRestaurantOrder = async (updateStatusOrderRequest: UpdateOrderStatusRequest) => {
+    const updateMyRestaurantOrder = async (updateStatusOrderRequest: UpdateOrderStatusRequest) => {
         const accessToken = await getAccessTokenSilently();
 
         const response = await fetch(
-            `${API_BASE_URL}/api//restaurant/order/${updateStatusOrderRequest.orderId}/status`,
+            `${API_BASE_URL}/api/my/restaurant/order/${updateStatusOrderRequest.orderId}/status`,
             {
                 method: 'PATCH',
                 headers: {
@@ -171,7 +171,7 @@ export const useUpdateRestaurantOrder = () => {
         isError,
         isSuccess,
         reset,
-    } = useMutation(updateRestaurantOrder);
+    } = useMutation(updateMyRestaurantOrder);
 
     if (isSuccess) {
         toast.success('Order updated');
