@@ -10,7 +10,6 @@ export const useGetMyUser = () => {
 
     const getMyUserRequest = async (): Promise<User> => {
         const accessToken = await getAccessTokenSilently();
-
         const response = await fetch(`${API_BASE_URL}/api/my/user`, {
             method: 'GET',
             headers: {
@@ -18,7 +17,6 @@ export const useGetMyUser = () => {
                 'Content-Type': 'application/json',
             },
         });
-
         if (!response.ok) {
             throw new Error('Failed to fetch user');
         }
@@ -53,7 +51,6 @@ export const useCreateMyUser = () => {
             },
             body: JSON.stringify(user),
         });
-
         if (!response.ok) {
             throw new Error('Failed to create user');
         }

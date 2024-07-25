@@ -1,4 +1,5 @@
 import { useGetMyUser, useUpdateMyUser } from '@/api/UserApi';
+import BackButton from '@/components/BackButton';
 import UserProfileForm from '@/form/UserProfileForm';
 
 const UserProfilePage = () => {
@@ -14,11 +15,14 @@ const UserProfilePage = () => {
     }
 
     return (
-        <UserProfileForm
-            currentUser={currentUser}
-            onSave={updateUser}
-            isLoading={isUpdateLoading}
-        />
+        <div>
+            <BackButton />
+            <UserProfileForm
+                currentUser={currentUser}
+                onSave={updateUser}
+                isLoading={isUpdateLoading}
+            />
+        </div>
     );
 };
 

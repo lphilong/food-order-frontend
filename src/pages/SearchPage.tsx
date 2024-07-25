@@ -1,4 +1,5 @@
 import { useSearchRestaurants } from '@/api/SearchApi';
+import BackButton from '@/components/BackButton';
 import CuisineFilter from '@/components/CuisineFilter';
 import PaginationSelector from '@/components/PaginationSelector';
 import SearchBar, { SearchForm } from '@/components/SearchBar';
@@ -72,7 +73,12 @@ const SearchPage = () => {
     }
 
     if (!results?.data || !city) {
-        return <span>No results found</span>;
+        return (
+            <div className="flex">
+                <BackButton />
+                <span className="pl-5 text-2xl font-bold">No result found</span>
+            </div>
+        );
     }
 
     return (

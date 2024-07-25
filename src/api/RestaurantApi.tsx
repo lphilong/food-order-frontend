@@ -5,13 +5,29 @@ import { toast } from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetMyRestaurant = () => {
-    const { getAccessTokenSilently } = useAuth0();
+export const useGetAllRestaurants = () => {
+    const getAllRestaurantsRequest = async (): Promise<Restaurant[]> => {
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
+            method: 'GET',
+        });
 
-    const getMyRestaurantRequest = async (): Promise<Restaurant> => {
+        if (!response.ok) {
+            throw new Error('Failed to get restaurant');
+        }
+        return response.json();
+    };
+
+    const { data: restaurant, isLoading } = useQuery('fetchMyRestaurant', getAllRestaurantsRequest);
+
+    return { restaurant, isLoading };
+};
+
+export const useGetRestaurantsByUser = () => {
+    const { getAccessTokenSilently } = useAuth0();
+    const getRestaurantsByUser = async (): Promise<Restaurant[]> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant/user`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -21,12 +37,50 @@ export const useGetMyRestaurant = () => {
         if (!response.ok) {
             throw new Error('Failed to get restaurant');
         }
+
         return response.json();
     };
 
-    const { data: restaurant, isLoading } = useQuery('fetchMyRestaurant', getMyRestaurantRequest);
+    const { data: restaurants, isLoading } = useQuery('fetchAllRestaurant', getRestaurantsByUser);
 
-    return { restaurant, isLoading };
+    return { restaurants, isLoading };
+};
+
+export const useDeleteRestaurant = (restaurantId?: string) => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    const deleteRestaurantRequest = async (): Promise<string> => {
+        const accessToken = await getAccessTokenSilently();
+
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant/${restaurantId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete restaurant');
+        }
+
+        return response.json();
+    };
+    const {
+        mutate: deleteRestaurant,
+        isLoading,
+        isSuccess,
+        error,
+    } = useMutation(deleteRestaurantRequest);
+
+    if (isSuccess) {
+        toast.success('Restaurant deleted!');
+    }
+
+    if (error) {
+        toast.error('Unable to delete restaurant');
+    }
+
+    return { deleteRestaurant, isLoading };
 };
 
 export const useCreateMyRestaurant = () => {
@@ -62,7 +116,7 @@ export const useCreateMyRestaurant = () => {
     }
 
     if (error) {
-        toast.error('Unable to update restaurant');
+        toast.error('Unable to create restaurant');
     }
 
     return { createRestaurant, isLoading };

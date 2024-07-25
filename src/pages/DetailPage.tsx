@@ -1,4 +1,4 @@
-import { useGetRestaurant } from '@/api/SearchApi';
+import { useGetRestaurantById } from '@/api/SearchApi';
 import MenuItem from '@/components/MenuItem';
 import OrderSummary from '@/components/OrderSummary';
 import RestaurantInfo from '@/components/RestaurantInfo';
@@ -20,7 +20,7 @@ export type CartItem = {
 
 const DetailPage = () => {
     const { restaurantId } = useParams();
-    const { restaurant, isLoading } = useGetRestaurant(restaurantId);
+    const { restaurant, isLoading } = useGetRestaurantById(restaurantId);
     const { createCheckoutSession, isLoading: isCheckoutLoading } = useCreateCheckoutSession();
 
     const [cartItems, setCartItems] = useState<CartItem[]>(() => {

@@ -4,13 +4,19 @@ import { AspectRatio } from './ui/aspect-ratio';
 import { Banknote, Clock, Dot } from 'lucide-react';
 
 type Props = {
-    restaurant: Restaurant;
+    restaurant?: Restaurant;
 };
 
-const SearchResultCard = ({ restaurant }: Props) => {
+const RestaurantResultCard = ({ restaurant }: Props) => {
+    if (!restaurant) {
+        return <div>No restaurant data available.</div>;
+    }
     return (
-        <Link to={`/detail/${restaurant._id}`} className="grid lg:grid-cols-[2fr_3fr] gap-5 group">
-            <AspectRatio ratio={16 / 6}>
+        <Link
+            to={`/update/${restaurant._id}`}
+            className="grid lg:grid-cols-[2fr_3fr] gap-5 group mb-10 mt-5"
+        >
+            <AspectRatio ratio={16 / 9}>
                 <img src={restaurant.imageUrl} className="rounded-md w-full h-full object-cover" />
             </AspectRatio>
             <div>
@@ -42,4 +48,4 @@ const SearchResultCard = ({ restaurant }: Props) => {
     );
 };
 
-export default SearchResultCard;
+export default RestaurantResultCard;

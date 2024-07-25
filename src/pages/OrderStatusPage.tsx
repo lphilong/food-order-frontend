@@ -1,4 +1,5 @@
 import { useGetMyOrders } from '@/api/OrderApi';
+import BackButton from '@/components/BackButton';
 import OrderStatusDetail from '@/components/OrderStatusDetail';
 import OrderStatusHeader from '@/components/OrderStatusHeader';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -11,7 +12,12 @@ const OrderStatusPage = () => {
     }
 
     if (!orders || orders.length === 0) {
-        return 'No orders found';
+        return (
+            <div className="flex">
+                <BackButton />
+                <span className="pl-5 text-2xl font-bold">No order found</span>
+            </div>
+        );
     }
 
     return (
@@ -23,7 +29,7 @@ const OrderStatusPage = () => {
                         <OrderStatusDetail order={order} />
                         <AspectRatio ratio={16 / 5}>
                             <img
-                                src={order.restaurant.imageUrl}
+                                src={order.restaurant?.imageUrl}
                                 className="rounded-md object-cover h-full w-full"
                             />
                         </AspectRatio>

@@ -8,12 +8,13 @@ import DetailPage from './pages/DetailPage';
 import OrderStatusPage from './pages/OrderStatusPage';
 import ManageRestaurantPage from './pages/ManageRestaurantPage';
 import HomePage from './pages/HomePage';
+import UpdateRestaurant from './pages/UpdateRestaurant';
 
 const mRoute = [
     {
         path: '/',
         element: (
-            <Layout showHero>
+            <Layout showHero={false}>
                 <HomePage></HomePage>
             </Layout>
         ),
@@ -66,6 +67,15 @@ const mRoute = [
             </Layout>
         ),
     },
+    {
+        path: '/update/:restaurantId',
+        element: (
+            <Layout showHero={false}>
+                <UpdateRestaurant />
+            </Layout>
+        ),
+    },
+
     {
         path: '*',
         element: <Navigate to="/" />,
