@@ -4,11 +4,11 @@ import MainNav from './MainNav';
 
 const Header = () => {
     return (
-        <div className="border-b-2 border-b-orange-500 py-6 bg-orange-500">
-            <div className="container mx-auto flex justify-between items-center">
+        <div className=" py-6  z-50 ">
+            <div className=" container mx-auto flex justify-between">
                 <Link
                     to="/"
-                    className="font-bold hover:text-orange-500 hover:bg-white text-xl text-white"
+                    className="font-bold hover:text-orange-500 hover:bg-white text-xl text-black"
                 >
                     Demo Web
                 </Link>

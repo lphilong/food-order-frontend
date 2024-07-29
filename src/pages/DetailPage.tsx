@@ -6,17 +6,10 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardFooter } from '@/components/ui/card';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MenuItem as MenuItemType } from '../types';
+import { CartItem, MenuItem as MenuItemType } from '../types';
 import CheckoutButton from '@/components/CheckoutButton';
 import { UserFormData } from '@/form/UserProfileForm';
 import { useCreateCheckoutSession } from '@/api/OrderApi';
-
-export type CartItem = {
-    _id: string;
-    name: string;
-    price: number;
-    quantity: number;
-};
 
 const DetailPage = () => {
     const { restaurantId } = useParams();

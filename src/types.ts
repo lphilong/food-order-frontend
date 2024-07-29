@@ -13,6 +13,13 @@ export type MenuItem = {
     price: number;
 };
 
+export type CartItem = {
+    _id: string;
+    name: string;
+    price: number;
+    quantity: number;
+};
+
 export type Restaurant = {
     _id: string;
     user: string;
@@ -25,6 +32,11 @@ export type Restaurant = {
     menuItems: MenuItem[];
     imageUrl: string;
     lastUpdated: string;
+};
+
+export type SlideItems = {
+    title: string;
+    img: string;
 };
 
 export type OrderStatus = 'placed' | 'paid' | 'inProgress' | 'outForDelivery' | 'delivered';
@@ -57,4 +69,19 @@ export type RestaurantSearchResponse = {
         page: number;
         pages: number;
     };
+};
+
+export type CheckoutSessionRequest = {
+    cartItems: {
+        menuItemId: string;
+        name: string;
+        quantity: string;
+    }[];
+    deliveryDetails: {
+        email: string;
+        name: string;
+        addressLine1: string;
+        city: string;
+    };
+    restaurantId: string;
 };

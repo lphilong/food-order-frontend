@@ -7,15 +7,24 @@ import SearchPage from './pages/SearchPage';
 import DetailPage from './pages/DetailPage';
 import OrderStatusPage from './pages/OrderStatusPage';
 import ManageRestaurantPage from './pages/ManageRestaurantPage';
-import HomePage from './pages/HomePage';
 import UpdateRestaurant from './pages/UpdateRestaurant';
+import TestPage from './pages/TestPage';
+import LandingPage from './pages/LandingPage';
 
 const mRoute = [
     {
+        path: '/test',
+        element: (
+            <Layout>
+                <TestPage />
+            </Layout>
+        ),
+    },
+    {
         path: '/',
         element: (
-            <Layout showHero={false}>
-                <HomePage></HomePage>
+            <Layout>
+                <LandingPage />
             </Layout>
         ),
     },
@@ -36,7 +45,7 @@ const mRoute = [
     {
         path: '/search/:city',
         element: (
-            <Layout showHero={false}>
+            <Layout>
                 <SearchPage />
             </Layout>
         ),
@@ -44,7 +53,7 @@ const mRoute = [
     {
         path: '/detail/:restaurantId',
         element: (
-            <Layout showHero={false}>
+            <Layout>
                 <DetailPage />
             </Layout>
         ),
@@ -70,7 +79,7 @@ const mRoute = [
     {
         path: '/update/:restaurantId',
         element: (
-            <Layout showHero={false}>
+            <Layout>
                 <UpdateRestaurant />
             </Layout>
         ),

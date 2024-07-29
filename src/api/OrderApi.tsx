@@ -1,4 +1,4 @@
-import { Order } from '@/types';
+import { CheckoutSessionRequest, Order } from '@/types';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
@@ -29,21 +29,6 @@ export const useGetMyOrders = () => {
     });
 
     return { orders, isLoading };
-};
-
-type CheckoutSessionRequest = {
-    cartItems: {
-        menuItemId: string;
-        name: string;
-        quantity: string;
-    }[];
-    deliveryDetails: {
-        email: string;
-        name: string;
-        addressLine1: string;
-        city: string;
-    };
-    restaurantId: string;
 };
 
 export const useCreateCheckoutSession = () => {
