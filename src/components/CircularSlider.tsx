@@ -23,11 +23,11 @@ const CircularSlider = ({ slidePosition, slideItems }: Props) => {
 
     return (
         <div
-            className="flex h-[400px]  z-50 pointer-events-none items-end absolute right-0 overflow-hidden  "
+            className="lg:flex lg:h-[400px]  z-50 pointer-events-none lg:items-end lg:absolute lg:right-0 lg:overflow-hidden  "
             style={{ transform: `translateX(-35%) translateY(45%)` }}
         >
             <div
-                className="w-[600px] h-[600px] rounded-full relative "
+                className="lg:w-[600px] lg:h-[600px] lg:rounded-full lg:relative "
                 style={{
                     transform: `rotate(-${slidePosition * (360 / slideItems.length)}deg)`,
                 }}
@@ -35,7 +35,7 @@ const CircularSlider = ({ slidePosition, slideItems }: Props) => {
                 {positions.map((pos, index) => (
                     <img
                         key={index}
-                        className="`w-[20%] h-[20%] rounded-full absolute"
+                        className="`w-[20%] h-[20%] rounded-full absolute  max-sm:hidden "
                         style={{
                             left: pos.x,
                             top: pos.y,

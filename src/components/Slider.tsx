@@ -5,9 +5,9 @@ type Props = {
 };
 const Slider = ({ slidePosition, slideItems }: Props) => {
     return (
-        <div className="overflow-hidden  w-[280px] ">
+        <div className="lg:overflow-hidden  lg:w-[280px]  ">
             <div
-                className="flex transform transition-transform duration-300 ease-out "
+                className="lg:flex lg:transform lg:transition-transform lg:duration-300 lg:ease-out "
                 style={{
                     transform: `translateX(-${(slidePosition % (slideItems.length * 2)) * 100}%)`,
                 }}
@@ -17,7 +17,7 @@ const Slider = ({ slidePosition, slideItems }: Props) => {
                         key={index}
                         src={slide.img}
                         alt={slide.title}
-                        className="rounded-md object-cover h-full w-full"
+                        className="lg:rounded-md lg:object-cover lg:h-full lg:w-full  max-sm:hidden"
                     />
                 ))}
             </div>

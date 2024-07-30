@@ -14,7 +14,7 @@ const MainNav = () => {
             ) : (
                 <Button
                     variant="ghost"
-                    className="font-bold hover:text-orange-500 hover:bg-white text-xl text-white"
+                    className="font-bold hover:text-orange-300 hover:bg-white text-xl text-white"
                     onClick={async () => await loginWithRedirect()}
                 >
                     Log In

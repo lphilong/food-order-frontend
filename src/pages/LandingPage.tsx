@@ -33,8 +33,8 @@ const LandingPage = () => {
     };
     return (
         <div className=" flex flex-col ">
-            <div className="w-[25%]">
-                <div className="flex flex-col text-justify justify-between gap-10   mt-[30%]">
+            <div className="w-[25%] max-sm:w-full">
+                <div className="flex flex-col text-justify justify-between gap-10 lg:mt-[30%] max-sm:items-center">
                     <header className="text-5xl font-bold text-orange-300">Delicious</header>
                     <span>
                         Lorem ipsum odor amet, consectetuer adipiscing elit. Facilisis habitant
@@ -48,13 +48,13 @@ const LandingPage = () => {
                         Get started
                     </button>
                 </div>
-                <div className="absolute top-0 right-0 h-[75%] w-[70%] rounded-b-full bg-orange-300 z100 flex justify-center  ">
+                <div className="lg:absolute lg:top-0 lg:right-0 lg:h-[75%] lg:w-[70%] lg:rounded-b-full lg:bg-orange-300 z100 lg:flex lg:justify-center max-sm:hidden  ">
                     <CircularSlider slidePosition={slidePosition} slideItems={slideItems} />
                     <div
-                        className="flex justify-between w-[70%] items-center"
+                        className="lg:flex lg:justify-between lg:w-[70%] lg:items-center"
                         style={{ transform: `translateY(-3%)` }}
                     >
-                        <div className="flex justify-center flex-col gap-5 ">
+                        <div className="lg:flex lg:justify-center lg:flex-col lg:gap-5 ">
                             <button onClick={() => handleNextSlide('forward')}>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@ const LandingPage = () => {
                                     viewBox="0 0 24 24"
                                     strokeWidth={1.5}
                                     stroke="white"
-                                    className="size-8 rounded-full bg-orange-400 "
+                                    className="lg:size-8 lg:rounded-full lg:bg-orange-400 "
                                 >
                                     <path
                                         strokeLinecap="round"
@@ -78,7 +78,7 @@ const LandingPage = () => {
                                     viewBox="0 0 24 24"
                                     strokeWidth={1.5}
                                     stroke="white"
-                                    className="size-8 rounded-full bg-orange-400"
+                                    className="lg:size-8 lg:rounded-full lg:bg-orange-400"
                                 >
                                     <path
                                         strokeLinecap="round"
@@ -89,14 +89,14 @@ const LandingPage = () => {
                             </button>
                         </div>
                         <Slider slidePosition={slidePosition} slideItems={slideItems} />
-                        <div className="flex items-center">
+                        <div className="lg:flex lg:items-center">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={5}
                                 stroke="white"
-                                className="size-6 rounded-full bg-orange-400 "
+                                className="lg:size-6 lg:rounded-full lg:bg-orange-400 "
                             >
                                 <path
                                     strokeLinecap="round"
@@ -109,7 +109,7 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-12 mt-[30%]">
+            <div className="flex flex-col gap-12 mt-[30%] ">
                 <div className="grid md:grid-cols-2 gap-5">
                     <img src={landingImage} />
                     <div className="flex flex-col items-center justify-center gap-4 text-center">
