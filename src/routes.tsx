@@ -10,6 +10,7 @@ import ManageRestaurantPage from './pages/ManageRestaurantPage';
 import UpdateRestaurant from './pages/UpdateRestaurant';
 import TestPage from './pages/TestPage';
 import LandingPage from './pages/LandingPage';
+import RestaurantPage from './pages/RestaurantPage';
 
 const mRoute = [
     {
@@ -17,6 +18,14 @@ const mRoute = [
         element: (
             <Layout>
                 <TestPage />
+            </Layout>
+        ),
+    },
+    {
+        path: '/restaurant',
+        element: (
+            <Layout>
+                <RestaurantPage />
             </Layout>
         ),
     },

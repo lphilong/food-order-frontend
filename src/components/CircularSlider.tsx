@@ -1,5 +1,4 @@
 import { SlideItems } from '@/types';
-
 const degToRad = (deg: number) => deg * (Math.PI / 180);
 type Props = {
     slidePosition: number;
@@ -24,12 +23,14 @@ const CircularSlider = ({ slidePosition, slideItems }: Props) => {
 
     return (
         <div
-            className="flex h-[300px] justify-end z-50 pointer-events-none"
-            style={{ transform: `translateY(10%) translateX(-12%) ` }}
+            className="flex h-[400px]  z-50 pointer-events-none items-end absolute right-0 overflow-hidden  "
+            style={{ transform: `translateX(-35%) translateY(45%)` }}
         >
             <div
-                className="w-[600px] h-[600px] rounded-full relative"
-                style={{ transform: `rotate(-${slidePosition * (360 / slideItems.length)}deg)` }}
+                className="w-[600px] h-[600px] rounded-full relative "
+                style={{
+                    transform: `rotate(-${slidePosition * (360 / slideItems.length)}deg)`,
+                }}
             >
                 {positions.map((pos, index) => (
                     <img

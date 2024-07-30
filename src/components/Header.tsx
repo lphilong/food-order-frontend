@@ -4,14 +4,15 @@ import MainNav from './MainNav';
 
 const Header = () => {
     return (
-        <div className=" py-6  z-50 ">
+        <div className=" py-6 bg-orange-300 z-50 ">
             <div className=" container mx-auto flex justify-between">
                 <Link
                     to="/"
-                    className="font-bold hover:text-orange-500 hover:bg-white text-xl text-black"
+                    className="font-bold hover:text-orange-500 hover:bg-white text-xl text-white"
                 >
-                    Demo Web
+                    Your Logo
                 </Link>
+
                 <div className="md:hidden">
                     <MobileNav />
                 </div>
