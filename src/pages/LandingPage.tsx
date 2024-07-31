@@ -9,6 +9,7 @@ import i3 from '../assets/image 3.png';
 import i6 from '../assets/image 6.png';
 import i5 from '../assets/image 5.png';
 import { useNavigate } from 'react-router-dom';
+import Introduction from '@/components/Introduction';
 const LandingPage = () => {
     const [slidePosition, setSlidePosition] = useState(0);
 
@@ -113,6 +114,7 @@ const LandingPage = () => {
             </div>
 
             <div className="flex flex-col gap-12 mt-[15%] ">
+                <Introduction />
                 <div className="grid md:grid-cols-2 gap-5">
                     <img src={landingImage} />
                     <div className="flex flex-col items-center justify-center gap-4 text-center">
