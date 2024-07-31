@@ -11,6 +11,7 @@ import i5 from '../assets/image 5.png';
 import { useNavigate } from 'react-router-dom';
 const LandingPage = () => {
     const [slidePosition, setSlidePosition] = useState(0);
+
     const navigate = useNavigate();
     const slideItems = [
         { title: 'Slide 1', img: `${i1}` },
@@ -33,13 +34,15 @@ const LandingPage = () => {
     };
     return (
         <div className=" flex flex-col ">
-            <div className="w-[25%] max-sm:w-full">
-                <div className="flex flex-col text-justify justify-between gap-10 lg:mt-[30%] max-sm:items-center">
+            <div className="w-[25%] max-md:w-full">
+                <div className="flex flex-col text-justify justify-between gap-10 lg:mt-[30%] max-md:items-center">
                     <header className="text-5xl font-bold text-orange-300">Delicious</header>
                     <span>
                         Lorem ipsum odor amet, consectetuer adipiscing elit. Facilisis habitant
                         risus donec ac sociosqu. Nisi pretium ut fusce curabitur et. Parturient
-                        sodales porttitor pellentesque ex maximus hac erat scelerisque egestas.
+                        sodales porttitor pellentesque ex maximus hac erat scelerisque egestas. Nisi
+                        pretium ut fusce curabitur et. Parturient sodales porttitor pellentesque ex
+                        maximus hac erat scelerisque egestas.
                     </span>
                     <button
                         onClick={() => navigate('/restaurant')}
@@ -48,7 +51,7 @@ const LandingPage = () => {
                         Get started
                     </button>
                 </div>
-                <div className="lg:absolute lg:top-0 lg:right-0 lg:h-[75%] lg:w-[70%] lg:rounded-b-full lg:bg-orange-300 z100 lg:flex lg:justify-center max-sm:hidden  ">
+                <div className="lg:absolute lg:top-0 lg:right-0 lg:h-[600px] lg:w-[70%] lg:rounded-b-full lg:bg-orange-300 lg:flex lg:justify-center max-md:hidden  ">
                     <CircularSlider slidePosition={slidePosition} slideItems={slideItems} />
                     <div
                         className="lg:flex lg:justify-between lg:w-[70%] lg:items-center"
@@ -109,7 +112,7 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-12 mt-[30%] ">
+            <div className="flex flex-col gap-12 mt-[15%] ">
                 <div className="grid md:grid-cols-2 gap-5">
                     <img src={landingImage} />
                     <div className="flex flex-col items-center justify-center gap-4 text-center">

@@ -23,7 +23,7 @@ const CircularSlider = ({ slidePosition, slideItems }: Props) => {
 
     return (
         <div
-            className="lg:flex lg:h-[400px]  z-50 pointer-events-none lg:items-end lg:absolute lg:right-0 lg:overflow-hidden  "
+            className="lg:flex lg:h-[400px] pointer-events-none lg:items-end lg:absolute lg:right-0 lg:overflow-hidden  "
             style={{ transform: `translateX(-35%) translateY(45%)` }}
         >
             <div

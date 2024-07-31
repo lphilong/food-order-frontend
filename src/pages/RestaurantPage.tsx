@@ -27,7 +27,7 @@ const RestaurantPage = () => {
     return (
         <div className="flex flex-col gap-12">
             <div className="bg-white rounded-lg shadow-md p-4">
-                <div className="flex mb-10 justify-between items-center max-sm:flex-col max-sm:gap-5">
+                <div className="flex mb-10 justify-between items-center max-md:flex-col max-md:gap-5">
                     <h2 className="text-5xl font-bold ">Restaurants</h2>
                     <SearchBar placeHolder="Search by City or Town" onSubmit={handleSearchSubmit} />
                 </div>
