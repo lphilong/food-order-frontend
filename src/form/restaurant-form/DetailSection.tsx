@@ -1,11 +1,4 @@
-import {
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useFormContext } from 'react-hook-form';
 
@@ -63,10 +56,10 @@ const DetailsSection = () => {
                 control={control}
                 name="deliveryPrice"
                 render={({ field }) => (
-                    <FormItem className="max-w-[25%]">
+                    <FormItem className="max-w-[25%] max-sm:max-w-full">
                         <FormLabel>Delivery price ($)</FormLabel>
                         <FormControl>
-                            <Input {...field} className="bg-white" placeholder="1.50" />
+                            <Input {...field} className="bg-white max-sm:max-w-[25%]" placeholder="1.50" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -76,10 +69,10 @@ const DetailsSection = () => {
                 control={control}
                 name="estimatedDeliveryTime"
                 render={({ field }) => (
-                    <FormItem className="max-w-[25%]">
+                    <FormItem className="max-w-[25%] max-sm:max-w-full">
                         <FormLabel>Estimated Delivery Time (minutes)</FormLabel>
                         <FormControl>
-                            <Input {...field} className="bg-white" placeholder="30" />
+                            <Input {...field} className="bg-white max-sm:max-w-[25%]" placeholder="30" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>

@@ -17,11 +17,7 @@ const UserProfilePage = () => {
     return (
         <div>
             <BackButton />
-            <UserProfileForm
-                currentUser={currentUser}
-                onSave={updateUser}
-                isLoading={isUpdateLoading}
-            />
+            <UserProfileForm currentUser={currentUser} onSave={updateUser} isLoading={isUpdateLoading} />
         </div>
     );
 };

@@ -12,17 +12,12 @@ const RestaurantResultCard = ({ restaurant }: Props) => {
         return <div>No restaurant data available.</div>;
     }
     return (
-        <Link
-            to={`/update/${restaurant._id}`}
-            className="grid lg:grid-cols-[2fr_3fr] gap-5 group mb-10 mt-5"
-        >
+        <Link to={`/update/${restaurant._id}`} className="grid lg:grid-cols-[2fr_3fr] gap-5 group mb-10 mt-5 bg-gray-50 p-5">
             <AspectRatio ratio={16 / 9}>
                 <img src={restaurant.imageUrl} className="rounded-md w-full h-full object-cover" />
             </AspectRatio>
             <div>
-                <h3 className="text-2xl font-bold tracking-tight mb-2 group-hover:underline">
-                    {restaurant.restaurantName}
-                </h3>
+                <h3 className="text-2xl font-bold tracking-tight mb-2 group-hover:underline">{restaurant.restaurantName}</h3>
                 <div id="card-content" className="grid md:grid-cols-2 gap-2">
                     <div className="flex flex-row flex-wrap">
                         {restaurant.cuisines.map((item, index) => (
