@@ -1,5 +1,6 @@
 import { MenuItem } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { formatCurrency } from '../utils/formatCurrency';
 
 type Props = {
     menuItem: MenuItem;
@@ -12,7 +13,7 @@ const MenuItem = ({ menuItem, addToCart }: Props) => {
             <CardHeader>
                 <CardTitle>{menuItem.name}</CardTitle>
             </CardHeader>
-            <CardContent className="font-bold">${(menuItem.price / 100).toFixed(2)}</CardContent>
+            <CardContent className="font-bold">${formatCurrency(menuItem.price)}</CardContent>
         </Card>
     );
 };

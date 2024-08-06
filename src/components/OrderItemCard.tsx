@@ -59,9 +59,7 @@ const OrderItemCard = ({ order }: Props) => {
                     </div>
                     <div>
                         Total Cost:
-                        <span className="ml-2 font-normal">
-                            ${(order.totalAmount / 100).toFixed(2)}
-                        </span>
+                        <span className="ml-2 font-normal">${order.totalAmount}</span>
                     </div>
                 </CardTitle>
                 <Separator />
@@ -79,11 +77,7 @@ const OrderItemCard = ({ order }: Props) => {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="status">What is the status of this order?</Label>
-                    <Select
-                        value={status}
-                        disabled={isLoading}
-                        onValueChange={(value) => handleStatusChange(value as OrderStatus)}
-                    >
+                    <Select value={status} disabled={isLoading} onValueChange={(value) => handleStatusChange(value as OrderStatus)}>
                         <SelectTrigger id="status">
                             <SelectValue placeholder="Status" />
                         </SelectTrigger>

@@ -28,7 +28,7 @@ const MenuSection = () => {
                     </FormItem>
                 )}
             />
-            <Button type="button" onClick={() => append({ name: '', price: '' })}>
+            <Button type="button" className="w-[20%] max-sm:w-full" onClick={() => append({ name: '', price: '' })}>
                 Add Menu Item
             </Button>
         </div>

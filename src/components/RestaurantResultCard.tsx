@@ -2,6 +2,7 @@ import { Restaurant } from '@/types';
 import { Link } from 'react-router-dom';
 import { AspectRatio } from './ui/aspect-ratio';
 import { Banknote, Clock, Dot } from 'lucide-react';
+import { formatCurrency } from '../utils/formatCurrency';
 
 type Props = {
     restaurant?: Restaurant;
@@ -21,7 +22,7 @@ const RestaurantResultCard = ({ restaurant }: Props) => {
                 <div id="card-content" className="grid md:grid-cols-2 gap-2">
                     <div className="flex flex-row flex-wrap">
                         {restaurant.cuisines.map((item, index) => (
-                            <span className="flex">
+                            <span key={index} className="flex">
                                 <span>{item}</span>
                                 {index < restaurant.cuisines.length - 1 && <Dot />}
                             </span>
@@ -34,7 +35,7 @@ const RestaurantResultCard = ({ restaurant }: Props) => {
                         </div>
                         <div className="flex items-center gap-1">
                             <Banknote />
-                            Delivery from ${(restaurant.deliveryPrice / 100).toFixed(2)}
+                            Delivery from ${formatCurrency(restaurant.deliveryPrice)}
                         </div>
                     </div>
                 </div>
