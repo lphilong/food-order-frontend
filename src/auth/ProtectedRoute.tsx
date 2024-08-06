@@ -5,14 +5,18 @@ import { useNavigate } from 'react-router-dom';
 type ProtectedRouteProps = PropsWithChildren;
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const isAuthenticated = useAuth0();
+    const { isAuthenticated, isLoading } = useAuth0();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoading && !isAuthenticated) {
             navigate('/', { replace: true });
         }
-    }, [navigate, isAuthenticated]);
+    }, [navigate, isLoading, isAuthenticated]);
 
-    return children;
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    return isAuthenticated ? children : null;
 }

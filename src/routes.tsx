@@ -2,7 +2,6 @@ import { Navigate } from 'react-router-dom';
 import Layout from './layouts/layout';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import UserProfilePage from './pages/UserProfilePage';
-import ProtectedRoute from './auth/ProtectedRoute';
 import SearchPage from './pages/SearchPage';
 import DetailPage from './pages/DetailPage';
 import OrderStatusPage from './pages/OrderStatusPage';
@@ -40,12 +39,11 @@ const mRoute = [
     {
         path: '/user-profile',
         element: (
-            <ProtectedRoute>
-                <Layout>
-                    <UserProfilePage />
-                </Layout>
-            </ProtectedRoute>
+            <Layout>
+                <UserProfilePage />
+            </Layout>
         ),
+        protected: true,
     },
     {
         path: '/auth-callback',
@@ -70,12 +68,11 @@ const mRoute = [
     {
         path: '/order-status',
         element: (
-            <ProtectedRoute>
-                <Layout>
-                    <OrderStatusPage />
-                </Layout>
-            </ProtectedRoute>
+            <Layout>
+                <OrderStatusPage />
+            </Layout>
         ),
+        protected: true,
     },
     {
         path: '/manage-restaurant',
@@ -84,6 +81,7 @@ const mRoute = [
                 <ManageRestaurantPage />
             </Layout>
         ),
+        protected: true,
     },
     {
         path: '/update/:restaurantId',
