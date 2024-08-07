@@ -10,6 +10,7 @@ import UpdateRestaurant from './pages/UpdateRestaurant';
 import TestPage from './pages/TestPage';
 import LandingPage from './pages/LandingPage';
 import RestaurantPage from './pages/RestaurantPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 
 const mRoute = [
     {
@@ -90,8 +91,17 @@ const mRoute = [
                 <UpdateRestaurant />
             </Layout>
         ),
+        protected: true,
     },
-
+    {
+        path: '/order/:restaurantId',
+        element: (
+            <Layout>
+                <OrderDetailPage />
+            </Layout>
+        ),
+        protected: true,
+    },
     {
         path: '*',
         element: <Navigate to="/" />,
