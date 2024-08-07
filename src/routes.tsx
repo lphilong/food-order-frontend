@@ -7,20 +7,11 @@ import DetailPage from './pages/DetailPage';
 import OrderStatusPage from './pages/OrderStatusPage';
 import ManageRestaurantPage from './pages/ManageRestaurantPage';
 import UpdateRestaurant from './pages/UpdateRestaurant';
-import TestPage from './pages/TestPage';
 import LandingPage from './pages/LandingPage';
 import RestaurantPage from './pages/RestaurantPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 
 const mRoute = [
-    {
-        path: '/test',
-        element: (
-            <Layout>
-                <TestPage />
-            </Layout>
-        ),
-    },
     {
         path: '/restaurant',
         element: (
