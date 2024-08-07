@@ -31,6 +31,32 @@ export const useGetMyOrders = () => {
     return { orders, isLoading };
 };
 
+export const useGetOrdersByRestaurant = (restaurantId?: string) => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    const getGetOrdersByRestaurant = async (): Promise<Order[]> => {
+        const accessToken = await getAccessTokenSilently();
+
+        const response = await fetch(`${API_BASE_URL}/api/order/${restaurantId}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get orders');
+        }
+
+        return response.json();
+    };
+
+    const { data: orders, isLoading } = useQuery('fetchOrdersByRestaurant', getGetOrdersByRestaurant, {
+        refetchInterval: 5000,
+    });
+
+    return { orders, isLoading };
+};
+
 export const useCreateCheckoutSession = () => {
     const { getAccessTokenSilently } = useAuth0();
 
@@ -53,12 +79,7 @@ export const useCreateCheckoutSession = () => {
         return response.json();
     };
 
-    const {
-        mutateAsync: createCheckoutSession,
-        isLoading,
-        error,
-        reset,
-    } = useMutation(createCheckoutSessionRequest);
+    const { mutateAsync: createCheckoutSession, isLoading, error, reset } = useMutation(createCheckoutSessionRequest);
 
     if (error) {
         toast.error(error.toString());
