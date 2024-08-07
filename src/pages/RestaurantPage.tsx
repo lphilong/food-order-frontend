@@ -35,11 +35,7 @@ const RestaurantPage = () => {
                     {visibleRestaurants.map((r) => (
                         <SearchResultCard key={r._id} restaurant={r} />
                     ))}
-                    <PaginationSelector
-                        page={currentPage}
-                        pages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+                    <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />
                 </ul>
             </div>
         </div>

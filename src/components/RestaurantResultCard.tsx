@@ -13,7 +13,7 @@ const RestaurantResultCard = ({ restaurant }: Props) => {
         return <div>No restaurant data available.</div>;
     }
     return (
-        <Link to={`/update/${restaurant._id}`} className="grid lg:grid-cols-[2fr_3fr] gap-5 group mb-10 mt-5 bg-gray-50 p-5">
+        <Link to={`/update/${restaurant._id}`} className="grid lg:grid-cols-[2fr_3fr] gap-5 group bg-gray-50 p-5">
             <AspectRatio ratio={16 / 9}>
                 <img src={restaurant.imageUrl} className="rounded-md w-full h-full object-cover" />
             </AspectRatio>
