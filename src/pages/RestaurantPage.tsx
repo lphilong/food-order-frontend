@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useGetAllRestaurants } from '@/api/RestaurantApi';
 import PaginationSelector from '@/components/PaginationSelector';
 import SearchResultCard from '@/components/SearchResultCard';
+import RestaurantPageLoader from '@/components/SkeletonLoader/RestaurantPageLoader';
 
 const RestaurantPage = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const RestaurantPage = () => {
             pathname: `/search/${searchFormValues.searchQuery}`,
         });
     };
-    const { restaurant } = useGetAllRestaurants();
+    const { restaurant, isLoading } = useGetAllRestaurants();
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
     const totalRestaurants = restaurant?.length || 0;
@@ -32,10 +33,8 @@ const RestaurantPage = () => {
                     <SearchBar placeHolder="Search by City or Town" onSubmit={handleSearchSubmit} />
                 </div>
                 <ul className="space-y-4">
-                    {visibleRestaurants.map((r) => (
-                        <SearchResultCard key={r._id} restaurant={r} />
-                    ))}
-                    <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />
+                    {isLoading ? Array.from({ length: pageSize }).map((_, index) => <RestaurantPageLoader key={index} />) : visibleRestaurants.map((r) => <SearchResultCard key={r._id} restaurant={r} />)}
+                    {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />}
                 </ul>
             </div>
         </div>

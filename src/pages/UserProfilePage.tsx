@@ -1,5 +1,6 @@
 import { useGetMyUser, useUpdateMyUser } from '@/api/UserApi';
 import BackButton from '@/components/BackButton';
+import UserProfileLoader from '@/components/SkeletonLoader/UserProfileLoader';
 import UserProfileForm from '@/form/UserProfileForm';
 
 const UserProfilePage = () => {
@@ -7,7 +8,7 @@ const UserProfilePage = () => {
     const { updateUser, isLoading: isUpdateLoading } = useUpdateMyUser();
 
     if (isGetLoading) {
-        return <span>Loading...</span>;
+        return <UserProfileLoader />;
     }
 
     if (!currentUser) {

@@ -5,6 +5,7 @@ import PaginationSelector from '@/components/PaginationSelector';
 import SearchBar, { SearchForm } from '@/components/SearchBar';
 import SearchResultCard from '@/components/SearchResultCard';
 import SearchResultInfo from '@/components/SearchResultInfo';
+import SearchLoader from '@/components/SkeletonLoader/SearchLoader';
 import SortOptionDropdown from '@/components/SortOptionDropdown';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -69,7 +70,7 @@ const SearchPage = () => {
     };
 
     if (isLoading) {
-        <span>Loading ...</span>;
+        <SearchLoader />;
     }
 
     if (!results?.data || !city) {
@@ -92,28 +93,16 @@ const SearchPage = () => {
                 />
             </div>
             <div id="main-content" className="flex flex-col gap-5">
-                <SearchBar
-                    searchQuery={searchState.searchQuery}
-                    onSubmit={setSearchQuery}
-                    placeHolder="Search by Cuisine or Restaurant Name"
-                    onReset={resetSearch}
-                />
+                <SearchBar searchQuery={searchState.searchQuery} onSubmit={setSearchQuery} placeHolder="Search by Cuisine or Restaurant Name" onReset={resetSearch} />
                 <div className="flex justify-between flex-col gap-3 lg:flex-row">
                     <SearchResultInfo total={results.pagination.total} city={city} />
-                    <SortOptionDropdown
-                        sortOption={searchState.sortOption}
-                        onChange={(value) => setSortOption(value)}
-                    />
+                    <SortOptionDropdown sortOption={searchState.sortOption} onChange={(value) => setSortOption(value)} />
                 </div>
 
                 {results.data.map((restaurant) => (
-                    <SearchResultCard restaurant={restaurant} />
+                    <SearchResultCard key={restaurant._id} restaurant={restaurant} />
                 ))}
-                <PaginationSelector
-                    page={results.pagination.page}
-                    pages={results.pagination.pages}
-                    onPageChange={setPage}
-                />
+                <PaginationSelector page={results.pagination.page} pages={results.pagination.pages} onPageChange={setPage} />
             </div>
         </div>
     );
