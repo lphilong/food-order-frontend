@@ -11,7 +11,7 @@ const Introduction = () => {
         <div className="flex gap-2 flex-col text-justify">
             <div className="flex gap-10 flex-col">
                 <div className="flex gap-10 flex-col">
-                    <h2 className="font-bold text-5xl max-sm:text-3xl">Why xFood?</h2>
+                    <h2 className="font-bold text-5xl max-sm:text-2xl">Why xFood?</h2>
                     <ul className="flex gap-5 flex-col">
                         {features.map((feature, index) => (
                             <li key={index}>
@@ -22,7 +22,7 @@ const Introduction = () => {
                     </ul>
                 </div>
 
-                <h2 className="font-bold text-5xl max-sm:text-3xl">Frequently Asked Questions</h2>
+                <h2 className="font-bold text-5xl max-sm:text-2xl">Frequently Asked Questions</h2>
 
                 <span id="more" className={isExpanded ? '' : 'hidden'}>
                     {faqs.map((faq, index) => (

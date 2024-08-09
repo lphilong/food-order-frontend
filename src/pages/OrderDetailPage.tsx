@@ -10,7 +10,13 @@ const OrderDetailPage = () => {
     return (
         <>
             <BackButton />
-            <div className=" bg-gray-50 p-10 rounded-lg grid grid-cols-3 gap-4 ">{orders?.map((order) => <OrderItemCard order={order} />)}</div>
+            {orders?.length == 0 ? (
+                <div className="mt-5">
+                    <span className=" text-2xl font-bold">No order</span>
+                </div>
+            ) : (
+                <div className=" bg-gray-50 p-10 rounded-lg grid md:grid-cols-3 gap-4 ">{orders?.map((order) => <OrderItemCard order={order} />)}</div>
+            )}
         </>
     );
 };
