@@ -5,15 +5,16 @@ import { Banknote, Clock, Dot } from 'lucide-react';
 import { formatCurrency } from '../utils/formatCurrency';
 
 type Props = {
+    link: string;
     restaurant?: Restaurant;
 };
 
-const RestaurantResultCard = ({ restaurant }: Props) => {
+const RestaurantResultCard = ({ restaurant, link }: Props) => {
     if (!restaurant) {
         return <div>No restaurant data available.</div>;
     }
     return (
-        <Link to={`/update/${restaurant._id}`} className="grid lg:grid-cols-[2fr_3fr] gap-5 group bg-gray-50 p-5">
+        <Link to={link} className="grid lg:grid-cols-[2fr_3fr] gap-5 group bg-gray-50 p-5">
             <AspectRatio ratio={16 / 9}>
                 <img src={restaurant.imageUrl} className="rounded-md w-full h-full object-cover" />
             </AspectRatio>

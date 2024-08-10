@@ -10,15 +10,23 @@ import { useState } from 'react';
 const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
     const { restaurants, isLoading } = useGetRestaurantsByUser();
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 4;
+    const [currentRestaurantPage, setCurrentRestaurantPage] = useState(1);
+    const [currentOrderPage, setCurrentOrderPage] = useState(1);
+    const pageSize = 6;
     const totalRestaurants = restaurants?.length || 0;
     const totalPages = Math.ceil(totalRestaurants / pageSize);
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const visibleRestaurants = restaurants?.slice(startIndex, endIndex) || [];
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
+    const startOrder = (currentOrderPage - 1) * pageSize;
+    const endOrder = startOrder + pageSize;
+    const startRestaurant = (currentRestaurantPage - 1) * pageSize;
+    const endRestaurant = startRestaurant + pageSize;
+    const visibleRestaurants = restaurants?.slice(startRestaurant, endRestaurant) || [];
+    const visibleOrders = restaurants?.slice(startOrder, endOrder) || [];
+
+    const handleOrderChange = (newPage: number) => {
+        setCurrentOrderPage(newPage);
+    };
+    const handleRestaurantChange = (newPage: number) => {
+        setCurrentRestaurantPage(newPage);
     };
     return (
         <Tabs defaultValue="orders">
@@ -27,7 +35,8 @@ const ManageRestaurantPage = () => {
                 <TabsTrigger value="create-restaurant">Create Restaurant</TabsTrigger>
                 <TabsTrigger value="update-restaurant">Update Restaurant</TabsTrigger>
             </TabsList>
-            <TabsContent value="orders" className=" bg-gray-50 rounded-lg grid lg:grid-cols-3 gap-4 ">
+
+            <TabsContent value="orders" className="  rounded-lg grid lg:grid-cols-3 gap-4 mt-10  ">
                 {isLoading ? (
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (
@@ -35,9 +44,16 @@ const ManageRestaurantPage = () => {
                         <span className=" text-2xl font-bold">Create your restaurant first</span>
                     </div>
                 ) : (
-                    restaurants.map((restaurant) => <RestaurantCard restaurant={restaurant} />)
+                    visibleOrders.map((restaurant) => <RestaurantCard restaurant={restaurant} link={`/order/${restaurant._id}`} />)
+                )}
+
+                {!isLoading && (
+                    <div className="flex justify-center w-full my-4 col-span-full">
+                        <PaginationSelector page={currentOrderPage} pages={totalPages} onPageChange={handleOrderChange} />
+                    </div>
                 )}
             </TabsContent>
+
             <TabsContent value="create-restaurant">
                 <CreateRestaurantForm onSave={createRestaurant} isLoading={isCreateLoading} />
             </TabsContent>
@@ -49,9 +65,9 @@ const ManageRestaurantPage = () => {
                         <span className=" text-2xl font-bold">Create your restaurant</span>
                     </div>
                 ) : (
-                    visibleRestaurants.map((restaurant) => <RestaurantResultCard restaurant={restaurant} />)
+                    visibleRestaurants.map((restaurant) => <RestaurantResultCard restaurant={restaurant} link={`/update/${restaurant._id}`} />)
                 )}
-                {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />}
+                {!isLoading && <PaginationSelector page={currentRestaurantPage} pages={totalPages} onPageChange={handleRestaurantChange} />}
             </TabsContent>
         </Tabs>
     );

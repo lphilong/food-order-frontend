@@ -5,8 +5,15 @@ import { useParams } from 'react-router-dom';
 
 const OrderDetailPage = () => {
     const { restaurantId } = useParams();
-    const { orders } = useGetOrdersByRestaurant(restaurantId);
+    const { orders, isLoading, error } = useGetOrdersByRestaurant(restaurantId);
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error loading orders</div>;
+    }
     return (
         <>
             <BackButton />

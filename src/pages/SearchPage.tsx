@@ -100,7 +100,7 @@ const SearchPage = () => {
                 </div>
 
                 {results.data.map((restaurant) => (
-                    <SearchResultCard key={restaurant._id} restaurant={restaurant} />
+                    <SearchResultCard key={restaurant._id} restaurant={restaurant} link={`/detail/${restaurant._id}`} />
                 ))}
                 <PaginationSelector page={results.pagination.page} pages={results.pagination.pages} onPageChange={setPage} />
             </div>

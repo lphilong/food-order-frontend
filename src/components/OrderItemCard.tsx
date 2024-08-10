@@ -21,21 +21,22 @@ const OrderItemCard = ({ order }: Props) => {
     }, [order.status]);
 
     const handleStatusChange = async (newStatus: OrderStatus) => {
-        await updateRestaurantStatus({
-            orderId: order._id as string,
-            status: newStatus,
-        });
-        setStatus(newStatus);
+        try {
+            await updateRestaurantStatus({
+                orderId: order._id as string,
+                status: newStatus,
+            });
+            setStatus(newStatus);
+        } catch (err) {
+            console.error('Failed to update status:', err);
+        }
     };
 
     const getTime = () => {
         const orderDateTime = new Date(order.createdAt);
-
         const hours = orderDateTime.getHours();
         const minutes = orderDateTime.getMinutes();
-
         const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
         return `${hours}:${paddedMinutes}`;
     };
 
@@ -67,7 +68,7 @@ const OrderItemCard = ({ order }: Props) => {
             <CardContent className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                     {order.cartItems.map((cartItem) => (
-                        <span>
+                        <span key={cartItem.menuItemId}>
                             <Badge variant="outline" className="mr-2">
                                 {cartItem.quantity}
                             </Badge>
@@ -83,10 +84,13 @@ const OrderItemCard = ({ order }: Props) => {
                         </SelectTrigger>
                         <SelectContent position="popper">
                             {ORDER_STATUS.map((status) => (
-                                <SelectItem value={status.value}>{status.label}</SelectItem>
+                                <SelectItem key={status.value} value={status.value}>
+                                    {status.label}
+                                </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
+                    {isLoading && <div>Updating status...</div>}
                 </div>
             </CardContent>
         </Card>

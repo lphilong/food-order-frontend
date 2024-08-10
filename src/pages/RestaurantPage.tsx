@@ -33,7 +33,9 @@ const RestaurantPage = () => {
                     <SearchBar placeHolder="Search by City or Town" onSubmit={handleSearchSubmit} />
                 </div>
                 <ul className="space-y-4">
-                    {isLoading ? Array.from({ length: pageSize }).map((_, index) => <RestaurantPageLoader key={index} />) : visibleRestaurants.map((r) => <SearchResultCard key={r._id} restaurant={r} />)}
+                    {isLoading
+                        ? Array.from({ length: pageSize }).map((_, index) => <RestaurantPageLoader key={index} />)
+                        : visibleRestaurants.map((r) => <SearchResultCard key={r._id} restaurant={r} link={`/detail/${r._id}`} />)}
                     {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />}
                 </ul>
             </div>

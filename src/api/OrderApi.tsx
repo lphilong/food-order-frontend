@@ -50,11 +50,16 @@ export const useGetOrdersByRestaurant = (restaurantId?: string) => {
         return response.json();
     };
 
-    const { data: orders, isLoading } = useQuery('fetchOrdersByRestaurant', getGetOrdersByRestaurant, {
+    const {
+        data: orders,
+        isLoading,
+        error,
+    } = useQuery(['fetchOrdersByRestaurant', restaurantId], getGetOrdersByRestaurant, {
         refetchInterval: 5000,
+        enabled: !!restaurantId,
     });
 
-    return { orders, isLoading };
+    return { orders, isLoading, error };
 };
 
 export const useCreateCheckoutSession = () => {
