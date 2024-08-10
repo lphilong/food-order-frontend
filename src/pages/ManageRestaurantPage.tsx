@@ -1,4 +1,4 @@
-import { useGetMyOrders } from '@/api/OrderApi';
+import { useGetNewOrders } from '@/api/OrderApi';
 import { useCreateMyRestaurant, useGetRestaurantsByUser } from '@/api/RestaurantApi';
 import PaginationSelector from '@/components/PaginationSelector';
 import RestaurantCard from '@/components/RestaurantCard';
@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
     const { restaurants, isLoading } = useGetRestaurantsByUser();
-    const { orders } = useGetMyOrders();
+    const { orders } = useGetNewOrders();
     const [currentRestaurantPage, setCurrentRestaurantPage] = useState(1);
     const [currentOrderPage, setCurrentOrderPage] = useState(1);
     const [newOrders, setNewOrders] = useState<Order[]>([]);
