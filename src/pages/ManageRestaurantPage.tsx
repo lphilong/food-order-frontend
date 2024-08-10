@@ -46,7 +46,7 @@ const ManageRestaurantPage = () => {
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (
                     <div className="mt-10">
-                        <span className=" text-2xl font-bold">Create your restaurant first</span>
+                        <span className="text-2xl font-bold">Create your restaurant first</span>
                     </div>
                 ) : (
                     visibleOrders.map((restaurant) => (
@@ -74,7 +74,7 @@ const ManageRestaurantPage = () => {
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (
                     <div className="mt-10">
-                        <span className=" text-2xl font-bold">Create your restaurant</span>
+                        <span className="text-2xl font-bold">Create your restaurant</span>
                     </div>
                 ) : (
                     visibleRestaurants.map((restaurant) => (

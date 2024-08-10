@@ -25,6 +25,7 @@ export const useGetAllRestaurants = () => {
 
 export const useGetRestaurantsByUser = () => {
     const { getAccessTokenSilently } = useAuth0();
+
     const getRestaurantsByUser = async (): Promise<Restaurant[]> => {
         const accessToken = await getAccessTokenSilently();
 
@@ -36,13 +37,20 @@ export const useGetRestaurantsByUser = () => {
         });
 
         if (!response.ok) {
+            if (response.status === 404) {
+                return [];
+            }
             throw new Error('Failed to get restaurant');
         }
 
         return response.json();
     };
 
-    const { data: restaurants, isLoading } = useQuery('fetchAllRestaurant', getRestaurantsByUser);
+    const { data: restaurants = [], isLoading } = useQuery('fetchRestaurantsByUser', getRestaurantsByUser, {
+        staleTime: 60000, // 1 minute
+        cacheTime: 300000, // 5 minutes
+        refetchOnWindowFocus: false,
+    });
 
     return { restaurants, isLoading };
 };
