@@ -93,7 +93,12 @@ const SearchPage = () => {
                 />
             </div>
             <div id="main-content" className="flex flex-col gap-5">
-                <SearchBar searchQuery={searchState.searchQuery} onSubmit={setSearchQuery} placeHolder="Search by Cuisine or Restaurant Name" onReset={resetSearch} />
+                <SearchBar
+                    searchQuery={searchState.searchQuery}
+                    onSubmit={setSearchQuery}
+                    placeHolder="Search by Cuisine or Restaurant Name"
+                    onReset={resetSearch}
+                />
                 <div className="flex justify-between flex-col gap-3 lg:flex-row">
                     <SearchResultInfo total={results.pagination.total} city={city} />
                     <SortOptionDropdown sortOption={searchState.sortOption} onChange={(value) => setSortOption(value)} />

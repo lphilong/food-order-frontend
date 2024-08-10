@@ -17,9 +17,7 @@ const CircularSlider = ({ slidePosition, slideItems }: Props) => {
         return { x, y };
     };
 
-    const positions = slideItems.map((_, index) =>
-        calculatePosition((360 / slideItems.length) * index),
-    );
+    const positions = slideItems.map((_, index) => calculatePosition((360 / slideItems.length) * index));
 
     return (
         <div

@@ -39,11 +39,9 @@ const LandingPage = () => {
                 <div className="flex flex-col text-justify justify-between gap-10 lg:mt-[30%] max-md:items-center">
                     <header className="text-5xl font-bold text-orange-300">Delicious</header>
                     <span>
-                        Lorem ipsum odor amet, consectetuer adipiscing elit. Facilisis habitant
-                        risus donec ac sociosqu. Nisi pretium ut fusce curabitur et. Parturient
-                        sodales porttitor pellentesque ex maximus hac erat scelerisque egestas. Nisi
-                        pretium ut fusce curabitur et. Parturient sodales porttitor pellentesque ex
-                        maximus hac erat scelerisque egestas.
+                        Lorem ipsum odor amet, consectetuer adipiscing elit. Facilisis habitant risus donec ac sociosqu. Nisi pretium ut fusce
+                        curabitur et. Parturient sodales porttitor pellentesque ex maximus hac erat scelerisque egestas. Nisi pretium ut fusce
+                        curabitur et. Parturient sodales porttitor pellentesque ex maximus hac erat scelerisque egestas.
                     </span>
                     <button
                         onClick={() => navigate('/restaurant')}
@@ -54,10 +52,7 @@ const LandingPage = () => {
                 </div>
                 <div className="lg:absolute lg:top-0 lg:right-0 lg:h-[600px] lg:w-[70%] lg:rounded-b-full lg:bg-orange-300 lg:flex lg:justify-center max-md:hidden  ">
                     <CircularSlider slidePosition={slidePosition} slideItems={slideItems} />
-                    <div
-                        className="lg:flex lg:justify-between lg:w-[70%] lg:items-center"
-                        style={{ transform: `translateY(-3%)` }}
-                    >
+                    <div className="lg:flex lg:justify-between lg:w-[70%] lg:items-center" style={{ transform: `translateY(-3%)` }}>
                         <div className="lg:flex lg:justify-center lg:flex-col lg:gap-5 ">
                             <button onClick={() => handleNextSlide('forward')}>
                                 <svg
@@ -68,11 +63,7 @@ const LandingPage = () => {
                                     stroke="white"
                                     className="lg:size-8 lg:rounded-full lg:bg-orange-400 "
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"
-                                    />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
                                 </svg>
                             </button>
                             <button onClick={() => handleNextSlide('backward')}>
@@ -84,11 +75,7 @@ const LandingPage = () => {
                                     stroke="white"
                                     className="lg:size-8 lg:rounded-full lg:bg-orange-400"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
-                                    />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
                                 </svg>
                             </button>
                         </div>
@@ -102,11 +89,7 @@ const LandingPage = () => {
                                 stroke="white"
                                 className="lg:size-6 lg:rounded-full lg:bg-orange-400 "
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M15.75 19.5 8.25 12l7.5-7.5"
-                                />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                             </svg>
                         </div>
                     </div>
@@ -118,12 +101,8 @@ const LandingPage = () => {
                 <div className="grid md:grid-cols-2 gap-5">
                     <img src={landingImage} />
                     <div className="flex flex-col items-center justify-center gap-4 text-center">
-                        <span className="font-bold text-3xl tracking-tighter">
-                            Order takeaway even faster!
-                        </span>
-                        <span>
-                            Download the App for faster ordering and personalized recommendations
-                        </span>
+                        <span className="font-bold text-3xl tracking-tighter">Order takeaway even faster!</span>
+                        <span>Download the App for faster ordering and personalized recommendations</span>
                         <img src={appDownloadImage} />
                     </div>
                 </div>

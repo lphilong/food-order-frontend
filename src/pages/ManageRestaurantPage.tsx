@@ -6,6 +6,7 @@ import RestaurantResultCard from '@/components/RestaurantResultCard';
 import OrderRestaurantLoader from '@/components/SkeletonLoader/OrderRestaurantLoader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CreateRestaurantForm from '@/form/restaurant-form/CreateRestaurantForm';
+import usePagination from '@/hooks/usePagination';
 import { Order } from '@/types';
 import { useEffect, useState } from 'react';
 
@@ -13,30 +14,24 @@ const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
     const { restaurants, isLoading } = useGetRestaurantsByUser();
     const { orders } = useGetNewOrders();
-    const [currentRestaurantPage, setCurrentRestaurantPage] = useState(1);
-    const [currentOrderPage, setCurrentOrderPage] = useState(1);
     const [newOrders, setNewOrders] = useState<Order[]>([]);
     const pageSize = 6;
-    const totalRestaurants = restaurants?.length || 0;
-    const totalPages = Math.ceil(totalRestaurants / pageSize);
-    const startOrder = (currentOrderPage - 1) * pageSize;
-    const endOrder = startOrder + pageSize;
-    const startRestaurant = (currentRestaurantPage - 1) * pageSize;
-    const endRestaurant = startRestaurant + pageSize;
-    const visibleRestaurants = restaurants?.slice(startRestaurant, endRestaurant) || [];
-    const visibleOrders = restaurants?.slice(startOrder, endOrder) || [];
+    const {
+        currentPage: currentOrderPage,
+        totalPages: totalOrderPages,
+        visibleItems: visibleOrders,
+        handlePageChange: handleOrderChange,
+    } = usePagination(restaurants || [], pageSize);
+    const {
+        currentPage: currentRestaurantPage,
+        totalPages: totalRestaurantPages,
+        visibleItems: visibleRestaurants,
+        handlePageChange: handleRestaurantChange,
+    } = usePagination(restaurants || [], pageSize);
 
     useEffect(() => {
-        setNewOrders(orders || []); // Ensure newOrders is always an array
+        setNewOrders(orders || []);
     }, [orders]);
-
-    const handleOrderChange = (newPage: number) => {
-        setCurrentOrderPage(newPage);
-    };
-
-    const handleRestaurantChange = (newPage: number) => {
-        setCurrentRestaurantPage(newPage);
-    };
 
     return (
         <Tabs defaultValue="orders">
@@ -66,7 +61,7 @@ const ManageRestaurantPage = () => {
 
                 {!isLoading && (
                     <div className="flex justify-center w-full my-4 col-span-full">
-                        <PaginationSelector page={currentOrderPage} pages={totalPages} onPageChange={handleOrderChange} />
+                        <PaginationSelector page={currentOrderPage} pages={totalOrderPages} onPageChange={handleOrderChange} />
                     </div>
                 )}
             </TabsContent>
@@ -82,9 +77,11 @@ const ManageRestaurantPage = () => {
                         <span className=" text-2xl font-bold">Create your restaurant</span>
                     </div>
                 ) : (
-                    visibleRestaurants.map((restaurant) => <RestaurantResultCard key={restaurant._id} restaurant={restaurant} link={`/update/${restaurant._id}`} />)
+                    visibleRestaurants.map((restaurant) => (
+                        <RestaurantResultCard key={restaurant._id} restaurant={restaurant} link={`/update/${restaurant._id}`} />
+                    ))
                 )}
-                {!isLoading && <PaginationSelector page={currentRestaurantPage} pages={totalPages} onPageChange={handleRestaurantChange} />}
+                {!isLoading && <PaginationSelector page={currentRestaurantPage} pages={totalRestaurantPages} onPageChange={handleRestaurantChange} />}
             </TabsContent>
         </Tabs>
     );

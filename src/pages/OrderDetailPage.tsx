@@ -22,7 +22,9 @@ const OrderDetailPage = () => {
                     <span className=" text-2xl font-bold">No order</span>
                 </div>
             ) : (
-                <div className=" bg-gray-50 p-10 rounded-lg grid md:grid-cols-3 gap-4 ">{orders?.map((order) => <OrderItemCard order={order} />)}</div>
+                <div className=" bg-gray-50 p-10 rounded-lg grid md:grid-cols-3 gap-4 ">
+                    {orders?.map((order) => <OrderItemCard order={order} />)}
+                </div>
             )}
         </>
     );

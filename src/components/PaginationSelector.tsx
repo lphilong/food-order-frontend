@@ -1,11 +1,4 @@
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from './ui/pagination';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/pagination';
 
 type Props = {
     page: number;
@@ -30,11 +23,7 @@ const PaginationSelector = ({ page, pages, onPageChange }: Props) => {
 
                 {pageNumbers.map((number) => (
                     <PaginationItem>
-                        <PaginationLink
-                            href="#"
-                            onClick={() => onPageChange(number)}
-                            isActive={page === number}
-                        >
+                        <PaginationLink href="#" onClick={() => onPageChange(number)} isActive={page === number}>
                             {number}
                         </PaginationLink>
                     </PaginationItem>

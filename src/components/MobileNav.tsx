@@ -29,10 +29,7 @@ const MobileNav = () => {
                     {isAuthenticated ? (
                         <MobileNavLinks />
                     ) : (
-                        <Button
-                            onClick={() => loginWithRedirect()}
-                            className="flex-1 font-bold bg-orange-300"
-                        >
+                        <Button onClick={() => loginWithRedirect()} className="flex-1 font-bold bg-orange-300">
                             Log In
                         </Button>
                     )}

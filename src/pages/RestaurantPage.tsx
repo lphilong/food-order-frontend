@@ -1,10 +1,11 @@
 import SearchBar, { SearchForm } from '@/components/SearchBar';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { useGetAllRestaurants } from '@/api/RestaurantApi';
 import PaginationSelector from '@/components/PaginationSelector';
 import SearchResultCard from '@/components/SearchResultCard';
 import RestaurantPageLoader from '@/components/SkeletonLoader/RestaurantPageLoader';
+import usePagination from '@/hooks/usePagination';
+import { Restaurant } from '@/types';
 
 const RestaurantPage = () => {
     const navigate = useNavigate();
@@ -14,16 +15,8 @@ const RestaurantPage = () => {
         });
     };
     const { restaurant, isLoading } = useGetAllRestaurants();
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
-    const totalRestaurants = restaurant?.length || 0;
-    const totalPages = Math.ceil(totalRestaurants / pageSize);
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const visibleRestaurants = restaurant?.slice(startIndex, endIndex) || [];
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-    };
+    const pageSize = 4;
+    const { currentPage, totalPages, visibleItems: visibleRestaurants, handlePageChange } = usePagination<Restaurant>(restaurant || [], pageSize);
 
     return (
         <div className="flex flex-col gap-12">

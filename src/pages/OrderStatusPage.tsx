@@ -2,10 +2,19 @@ import { useGetMyOrders } from '@/api/OrderApi';
 import BackButton from '@/components/BackButton';
 import OrderStatusDetail from '@/components/OrderStatusDetail';
 import OrderStatusHeader from '@/components/OrderStatusHeader';
+import PaginationSelector from '@/components/PaginationSelector';
 import OrderStatusLoader from '@/components/SkeletonLoader/OrderStatusLoader';
+import usePagination from '@/hooks/usePagination';
 
 const OrderStatusPage = () => {
     const { orders, isLoading } = useGetMyOrders();
+    const pageSize = 5;
+    const {
+        currentPage: currentPage,
+        totalPages: totalPages,
+        visibleItems: visibleOrders,
+        handlePageChange: handleRestaurantChange,
+    } = usePagination(orders || [], pageSize);
 
     if (isLoading) {
         return (
@@ -30,7 +39,7 @@ const OrderStatusPage = () => {
 
     return (
         <div className="space-y-10">
-            {orders.map((order) => (
+            {visibleOrders.map((order) => (
                 <div key={order._id} className="space-y-5 bg-gray-100 p-10 rounded-lg">
                     <OrderStatusHeader order={order} />
                     <div className="grid gap-5">
@@ -38,6 +47,7 @@ const OrderStatusPage = () => {
                     </div>
                 </div>
             ))}
+            {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handleRestaurantChange} />}
         </div>
     );
 };

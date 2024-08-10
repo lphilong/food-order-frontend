@@ -23,17 +23,13 @@ const DetailPage = () => {
 
     const addToCart = (menuItem: MenuItemType) => {
         setCartItems((prevCartItems) => {
-            const existingCartItem = prevCartItems.find(
-                (cartItem) => cartItem._id === menuItem._id,
-            );
+            const existingCartItem = prevCartItems.find((cartItem) => cartItem._id === menuItem._id);
 
             let updatedCartItems;
 
             if (existingCartItem) {
                 updatedCartItems = prevCartItems.map((cartItem) =>
-                    cartItem._id === menuItem._id
-                        ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                        : cartItem,
+                    cartItem._id === menuItem._id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem,
                 );
             } else {
                 updatedCartItems = [
@@ -108,17 +104,9 @@ const DetailPage = () => {
 
                 <div>
                     <Card>
-                        <OrderSummary
-                            restaurant={restaurant}
-                            cartItems={cartItems}
-                            removeFromCart={removeFromCart}
-                        />
+                        <OrderSummary restaurant={restaurant} cartItems={cartItems} removeFromCart={removeFromCart} />
                         <CardFooter>
-                            <CheckoutButton
-                                disabled={cartItems.length === 0}
-                                onCheckout={onCheckout}
-                                isLoading={isCheckoutLoading}
-                            />
+                            <CheckoutButton disabled={cartItems.length === 0} onCheckout={onCheckout} isLoading={isCheckoutLoading} />
                         </CardFooter>
                     </Card>
                 </div>

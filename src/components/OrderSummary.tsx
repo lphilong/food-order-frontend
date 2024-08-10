@@ -39,7 +39,8 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
                             {item.name}
                         </span>
                         <span className="flex items-center gap-1">
-                            <Trash className="cursor-pointer" color="red" size={20} onClick={() => removeFromCart(item)} />${formatCurrency(item.price * item.quantity)}
+                            <Trash className="cursor-pointer" color="red" size={20} onClick={() => removeFromCart(item)} />$
+                            {formatCurrency(item.price * item.quantity)}
                         </span>
                     </div>
                 ))}

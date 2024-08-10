@@ -13,12 +13,7 @@ const Slider = ({ slidePosition, slideItems }: Props) => {
                 }}
             >
                 {slideItems.map((slide, index) => (
-                    <img
-                        key={index}
-                        src={slide.img}
-                        alt={slide.title}
-                        className="lg:rounded-md lg:object-cover lg:h-full lg:w-full  max-sm:hidden"
-                    />
+                    <img key={index} src={slide.img} alt={slide.title} className="lg:rounded-md lg:object-cover lg:h-full lg:w-full  max-sm:hidden" />
                 ))}
             </div>
         </div>

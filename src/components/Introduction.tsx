@@ -34,7 +34,11 @@ const Introduction = () => {
                         </div>
                     ))}
                 </span>
-                <button id="toggleButton" className="font-bold hover:text-orange-300 bg-gray-200 text-xl text-black hover:border-orange-300 border py-2 w-full" onClick={toggleContent}>
+                <button
+                    id="toggleButton"
+                    className="font-bold hover:text-orange-300 bg-gray-200 text-xl text-black hover:border-orange-300 border py-2 w-full"
+                    onClick={toggleContent}
+                >
                     {isExpanded ? 'Read less' : 'Read more'}
                 </button>
             </div>

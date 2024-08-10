@@ -1,10 +1,5 @@
 import { Button } from './ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 type Props = {
     onChange: (value: string) => void;
@@ -27,8 +22,7 @@ const SORT_OPTIONS = [
 ];
 
 const SortOptionDropdown = ({ onChange, sortOption }: Props) => {
-    const selectedSortLabel =
-        SORT_OPTIONS.find((option) => option.value === sortOption)?.label || SORT_OPTIONS[0].label;
+    const selectedSortLabel = SORT_OPTIONS.find((option) => option.value === sortOption)?.label || SORT_OPTIONS[0].label;
 
     return (
         <DropdownMenu>
@@ -39,10 +33,7 @@ const SortOptionDropdown = ({ onChange, sortOption }: Props) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 {SORT_OPTIONS.map((option) => (
-                    <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={() => onChange(option.value)}
-                    >
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => onChange(option.value)}>
                         {option.label}
                     </DropdownMenuItem>
                 ))}
