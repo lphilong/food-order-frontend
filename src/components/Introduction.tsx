@@ -26,10 +26,8 @@ const Introduction = () => {
 
                 <span id="more" className={isExpanded ? '' : 'hidden'}>
                     {faqs.map((faq, index) => (
-                        <div className="flex gap-5 flex-col">
-                            <h3 key={index} className="font-bold text-3xl max-sm:text-xl">
-                                {faq.question}
-                            </h3>
+                        <div className="flex gap-5 flex-col" key={index}>
+                            <h3 className="font-bold text-3xl max-sm:text-xl">{faq.question}</h3>
                             <p>{faq.answer}</p>
 
                             <hr className="h-px mb-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
