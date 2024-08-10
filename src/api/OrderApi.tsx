@@ -31,6 +31,32 @@ export const useGetMyOrders = () => {
     return { orders, isLoading };
 };
 
+export const useGetNewOrders = () => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    const getNewOrdersRequest = async (): Promise<Order[]> => {
+        const accessToken = await getAccessTokenSilently();
+
+        const response = await fetch(`${API_BASE_URL}/api/order/new`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get orders');
+        }
+
+        return response.json();
+    };
+
+    const { data: orders, isLoading } = useQuery('fetchNewOrders', getNewOrdersRequest, {
+        refetchInterval: 5000,
+    });
+
+    return { orders, isLoading };
+};
+
 export const useGetOrdersByRestaurant = (restaurantId?: string) => {
     const { getAccessTokenSilently } = useAuth0();
 
