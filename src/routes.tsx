@@ -10,6 +10,8 @@ import UpdateRestaurant from './pages/UpdateRestaurant';
 import LandingPage from './pages/LandingPage';
 import RestaurantPage from './pages/RestaurantPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import ChatPage from './pages/ChatPage';
+import ConversationsListPage from './pages/ConversationsListPage';
 
 const mRoute = [
     {
@@ -27,15 +29,6 @@ const mRoute = [
                 <LandingPage />
             </Layout>
         ),
-    },
-    {
-        path: '/user-profile',
-        element: (
-            <Layout>
-                <UserProfilePage />
-            </Layout>
-        ),
-        protected: true,
     },
     {
         path: '/auth-callback',
@@ -56,6 +49,21 @@ const mRoute = [
                 <DetailPage />
             </Layout>
         ),
+    },
+    {
+        path: '*',
+        element: <Navigate to="/" />,
+    },
+];
+const privateRoute = [
+    {
+        path: '/user-profile',
+        element: (
+            <Layout>
+                <UserProfilePage />
+            </Layout>
+        ),
+        protected: true,
     },
     {
         path: '/order-status',
@@ -85,6 +93,15 @@ const mRoute = [
         protected: true,
     },
     {
+        path: '/chat/:restaurantId/:userId',
+        element: (
+            <Layout>
+                <ChatPage />
+            </Layout>
+        ),
+        protected: true,
+    },
+    {
         path: '/order/:restaurantId',
         element: (
             <Layout>
@@ -94,9 +111,13 @@ const mRoute = [
         protected: true,
     },
     {
-        path: '*',
-        element: <Navigate to="/" />,
+        path: '/conversations/:restaurantId',
+        element: (
+            <Layout>
+                <ConversationsListPage />
+            </Layout>
+        ),
+        protected: true,
     },
 ];
-
-export { mRoute };
+export { mRoute, privateRoute };
