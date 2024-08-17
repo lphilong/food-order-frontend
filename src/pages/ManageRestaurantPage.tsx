@@ -1,5 +1,7 @@
+import { useGetNewMessages } from '@/api/ChatApi';
 import { useGetNewOrders } from '@/api/OrderApi';
 import { useCreateMyRestaurant, useGetRestaurantsByUser } from '@/api/RestaurantApi';
+import ConversationCard from '@/components/ConversationCard';
 import PaginationSelector from '@/components/PaginationSelector';
 import RestaurantCard from '@/components/RestaurantCard';
 import RestaurantResultCard from '@/components/RestaurantResultCard';
@@ -7,13 +9,15 @@ import OrderRestaurantLoader from '@/components/SkeletonLoader/OrderRestaurantLo
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CreateRestaurantForm from '@/form/restaurant-form/CreateRestaurantForm';
 import usePagination from '@/hooks/usePagination';
-import { Order } from '@/types';
+import { Message, Order } from '@/types';
 import { useEffect, useState } from 'react';
 
 const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
     const { restaurants, isLoading } = useGetRestaurantsByUser();
     const { orders } = useGetNewOrders();
+    const { messages } = useGetNewMessages();
+    const [newMessages, setNewMessages] = useState<Message[]>([]);
     const [newOrders, setNewOrders] = useState<Order[]>([]);
     const pageSize = 6;
     const {
@@ -28,18 +32,51 @@ const ManageRestaurantPage = () => {
         visibleItems: visibleRestaurants,
         handlePageChange: handleRestaurantChange,
     } = usePagination(restaurants || [], pageSize);
+    const {
+        currentPage: currentConversationPage,
+        totalPages: totalConversationPages,
+        visibleItems: visibleConversations,
+        handlePageChange: handleConversationChange,
+    } = usePagination(restaurants || [], pageSize);
 
     useEffect(() => {
         setNewOrders(orders || []);
     }, [orders]);
+    useEffect(() => {
+        setNewMessages(messages || []);
+    }, [messages]);
 
     return (
         <Tabs defaultValue="orders">
             <TabsList>
                 <TabsTrigger value="orders">Orders</TabsTrigger>
+                <TabsTrigger value="messages">Messages</TabsTrigger>
                 <TabsTrigger value="create-restaurant">Create Restaurant</TabsTrigger>
                 <TabsTrigger value="update-restaurant">Update Restaurant</TabsTrigger>
             </TabsList>
+            <TabsContent value="messages" className="  rounded-lg grid lg:grid-cols-3 gap-4 mt-10  relative ">
+                {isLoading ? (
+                    Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
+                ) : !restaurants || restaurants.length === 0 ? (
+                    <div className="mt-10">
+                        <span className="text-2xl font-bold">Create your restaurant first</span>
+                    </div>
+                ) : (
+                    visibleConversations.map((restaurant) => (
+                        <ConversationCard
+                            key={restaurant._id}
+                            restaurant={restaurant}
+                            link={`/conversations/${restaurant._id}`}
+                            hasNewMessage={newMessages.some((message) => message.restaurant._id === restaurant._id)}
+                        />
+                    ))
+                )}
+                {!isLoading && (
+                    <div className="flex justify-center w-full my-4 col-span-full">
+                        <PaginationSelector page={currentConversationPage} pages={totalConversationPages} onPageChange={handleConversationChange} />
+                    </div>
+                )}
+            </TabsContent>
 
             <TabsContent value="orders" className="  rounded-lg grid lg:grid-cols-3 gap-4 mt-10  relative ">
                 {isLoading ? (
@@ -65,11 +102,11 @@ const ManageRestaurantPage = () => {
                     </div>
                 )}
             </TabsContent>
-
             <TabsContent value="create-restaurant">
                 <CreateRestaurantForm onSave={createRestaurant} isLoading={isCreateLoading} />
             </TabsContent>
             <TabsContent value="update-restaurant" className="bg-white rounded-lg shadow-md p-4 space-y-4">
+                {!isLoading && <PaginationSelector page={currentRestaurantPage} pages={totalRestaurantPages} onPageChange={handleRestaurantChange} />}
                 {isLoading ? (
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (

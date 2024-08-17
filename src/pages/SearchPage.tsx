@@ -7,7 +7,7 @@ import SearchResultCard from '@/components/SearchResultCard';
 import SearchResultInfo from '@/components/SearchResultInfo';
 import SearchLoader from '@/components/SkeletonLoader/SearchLoader';
 import SortOptionDropdown from '@/components/SortOptionDropdown';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export type SearchState = {
@@ -30,44 +30,44 @@ const SearchPage = () => {
 
     const { results, isLoading } = useSearchRestaurants(searchState, city);
 
-    const setSortOption = (sortOption: string) => {
+    const setSortOption = useCallback((sortOption: string) => {
         setSearchState((prevState) => ({
             ...prevState,
             sortOption,
             page: 1,
         }));
-    };
+    }, []);
 
-    const setSelectedCuisines = (selectedCuisines: string[]) => {
+    const setSelectedCuisines = useCallback((selectedCuisines: string[]) => {
         setSearchState((prevState) => ({
             ...prevState,
             selectedCuisines,
             page: 1,
         }));
-    };
+    }, []);
 
-    const setPage = (page: number) => {
+    const setPage = useCallback((page: number) => {
         setSearchState((prevState) => ({
             ...prevState,
             page,
         }));
-    };
+    }, []);
 
-    const setSearchQuery = (searchFormData: SearchForm) => {
+    const setSearchQuery = useCallback((searchFormData: SearchForm) => {
         setSearchState((prevState) => ({
             ...prevState,
             searchQuery: searchFormData.searchQuery,
             page: 1,
         }));
-    };
+    }, []);
 
-    const resetSearch = () => {
+    const resetSearch = useCallback(() => {
         setSearchState((prevState) => ({
             ...prevState,
             searchQuery: '',
             page: 1,
         }));
-    };
+    }, []);
 
     if (isLoading) {
         <SearchLoader />;

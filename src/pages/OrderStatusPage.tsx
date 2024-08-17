@@ -1,21 +1,23 @@
+import { lazy, Suspense } from 'react';
 import { useGetMyOrders } from '@/api/OrderApi';
 import BackButton from '@/components/BackButton';
-import OrderStatusDetail from '@/components/OrderStatusDetail';
-import OrderStatusHeader from '@/components/OrderStatusHeader';
 import PaginationSelector from '@/components/PaginationSelector';
 import OrderStatusLoader from '@/components/SkeletonLoader/OrderStatusLoader';
 import usePagination from '@/hooks/usePagination';
+import { useNavigate } from 'react-router-dom';
+
+const OrderStatusDetail = lazy(() => import('@/components/OrderStatusDetail'));
+const OrderStatusHeader = lazy(() => import('@/components/OrderStatusHeader'));
 
 const OrderStatusPage = () => {
     const { orders, isLoading } = useGetMyOrders();
     const pageSize = 5;
-    const {
-        currentPage: currentPage,
-        totalPages: totalPages,
-        visibleItems: visibleOrders,
-        handlePageChange: handleRestaurantChange,
-    } = usePagination(orders || [], pageSize);
+    const { currentPage, totalPages, visibleItems: visibleOrders, handlePageChange } = usePagination(orders || [], pageSize);
+    const navigate = useNavigate();
 
+    const handleChatNavigation = (restaurantId: string, userId: string) => {
+        navigate(`/chat/${restaurantId}/${userId}`);
+    };
     if (isLoading) {
         return (
             <div className="space-y-10">
@@ -39,15 +41,24 @@ const OrderStatusPage = () => {
 
     return (
         <div className="space-y-10">
+            {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />}
             {visibleOrders.map((order) => (
                 <div key={order._id} className="space-y-5 bg-gray-100 p-10 rounded-lg">
-                    <OrderStatusHeader order={order} />
-                    <div className="grid gap-5">
-                        <OrderStatusDetail order={order} />
-                    </div>
+                    <Suspense fallback={<OrderStatusLoader />}>
+                        <OrderStatusHeader order={order} />
+                        <div className="grid gap-5">
+                            <OrderStatusDetail order={order} />
+                        </div>
+                    </Suspense>
+                    <button
+                        onClick={() => handleChatNavigation(order.restaurant._id, order.user._id)}
+                        className="mt-4 w-full bg-blue-500 text-white p-2 rounded-lg"
+                    >
+                        Chat with Restaurant
+                    </button>
                 </div>
             ))}
-            {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handleRestaurantChange} />}
+            {!isLoading && <PaginationSelector page={currentPage} pages={totalPages} onPageChange={handlePageChange} />}
         </div>
     );
 };

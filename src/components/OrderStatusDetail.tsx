@@ -40,7 +40,7 @@ const OrderStatusDetail = ({ order }: Props) => {
 
                         <div className="flex gap-2">
                             <span className="font-bold">Total: </span>
-                            <span>${order.totalAmount}</span>
+                            <span>{order.totalAmount}</span>
                         </div>
                         <div className="flex gap-5 flex-col">
                             <div className="flex items-center gap-1 text-green-600">
@@ -49,7 +49,7 @@ const OrderStatusDetail = ({ order }: Props) => {
                             </div>
                             <div className="flex items-center gap-1">
                                 <Banknote />
-                                Delivery from ${formatCurrency(order.restaurant.deliveryPrice)}
+                                Delivery from {formatCurrency(order.restaurant.deliveryPrice)}
                             </div>
                         </div>
                     </div>

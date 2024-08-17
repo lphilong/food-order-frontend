@@ -6,7 +6,7 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ORDER_STATUS } from '@/config/orderStatus';
 import { useUpdateMyRestaurantOrder } from '@/api/RestaurantApi';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type Props = {
     order: Order;
@@ -32,13 +32,16 @@ const OrderItemCard = ({ order }: Props) => {
         }
     };
 
-    const getTime = () => {
+    const getTime = useMemo(() => {
         const orderDateTime = new Date(order.createdAt);
-        const hours = orderDateTime.getHours();
-        const minutes = orderDateTime.getMinutes();
-        const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        return `${hours}:${paddedMinutes}`;
-    };
+        return orderDateTime.toLocaleString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        });
+    }, [order.createdAt]);
 
     return (
         <Card>
@@ -56,11 +59,11 @@ const OrderItemCard = ({ order }: Props) => {
                     </div>
                     <div>
                         Time:
-                        <span className="ml-2 font-normal">{getTime()}</span>
+                        <span className="ml-2 font-normal">{getTime}</span>
                     </div>
                     <div>
                         Total Cost:
-                        <span className="ml-2 font-normal">${order.totalAmount}</span>
+                        <span className="ml-2 font-normal">{order.totalAmount}</span>
                     </div>
                 </CardTitle>
                 <Separator />

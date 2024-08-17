@@ -4,7 +4,7 @@ import OrderSummary from '@/components/OrderSummary';
 import RestaurantInfo from '@/components/RestaurantInfo';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardFooter } from '@/components/ui/card';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartItem, MenuItem as MenuItemType } from '../types';
 import CheckoutButton from '@/components/CheckoutButton';
@@ -20,19 +20,18 @@ const DetailPage = () => {
         const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
         return storedCartItems ? JSON.parse(storedCartItems) : [];
     });
+    useEffect(() => {
+        sessionStorage.setItem(`cartItems-${restaurantId}`, JSON.stringify(cartItems));
+    }, [cartItems, restaurantId]);
 
     const addToCart = (menuItem: MenuItemType) => {
         setCartItems((prevCartItems) => {
             const existingCartItem = prevCartItems.find((cartItem) => cartItem._id === menuItem._id);
 
-            let updatedCartItems;
-
             if (existingCartItem) {
-                updatedCartItems = prevCartItems.map((cartItem) =>
-                    cartItem._id === menuItem._id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem,
-                );
+                return prevCartItems.map((cartItem) => (cartItem._id === menuItem._id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem));
             } else {
-                updatedCartItems = [
+                return [
                     ...prevCartItems,
                     {
                         _id: menuItem._id,
@@ -42,47 +41,40 @@ const DetailPage = () => {
                     },
                 ];
             }
-
-            sessionStorage.setItem(`cartItems-${restaurantId}`, JSON.stringify(updatedCartItems));
-
-            return updatedCartItems;
         });
     };
 
     const removeFromCart = (cartItem: CartItem) => {
-        setCartItems((prevCartItems) => {
-            const updatedCartItems = prevCartItems.filter((item) => cartItem._id !== item._id);
-
-            sessionStorage.setItem(`cartItems-${restaurantId}`, JSON.stringify(updatedCartItems));
-
-            return updatedCartItems;
-        });
+        setCartItems((prevCartItems) => prevCartItems.filter((item) => cartItem._id !== item._id));
     };
 
-    const onCheckout = async (userFormData: UserFormData) => {
-        if (!restaurant) {
-            return;
-        }
+    const onCheckout = useCallback(
+        async (userFormData: UserFormData) => {
+            if (!restaurant) {
+                return;
+            }
 
-        const checkoutData = {
-            cartItems: cartItems.map((cartItem) => ({
-                menuItemId: cartItem._id,
-                name: cartItem.name,
-                quantity: cartItem.quantity.toString(),
-            })),
-            restaurantId: restaurant._id,
-            deliveryDetails: {
-                name: userFormData.name,
-                addressLine1: userFormData.addressLine1,
-                city: userFormData.city,
-                country: userFormData.country,
-                email: userFormData.email as string,
-            },
-        };
+            const checkoutData = {
+                cartItems: cartItems.map((cartItem) => ({
+                    menuItemId: cartItem._id,
+                    name: cartItem.name,
+                    quantity: cartItem.quantity.toString(),
+                })),
+                restaurantId: restaurant._id,
+                deliveryDetails: {
+                    name: userFormData.name,
+                    addressLine1: userFormData.addressLine1,
+                    city: userFormData.city,
+                    country: userFormData.country,
+                    email: userFormData.email as string,
+                },
+            };
 
-        const data = await createCheckoutSession(checkoutData);
-        window.location.href = data.url;
-    };
+            const data = await createCheckoutSession(checkoutData);
+            window.location.href = data.url;
+        },
+        [cartItems, restaurant, createCheckoutSession],
+    );
 
     if (isLoading || !restaurant) {
         return 'Loading...';

@@ -1,5 +1,5 @@
 import Slider from '@/components/Slider';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import landingImage from '../assets/landing.png';
 import appDownloadImage from '../assets/appDownload.png';
 import CircularSlider from '@/components/CircularSlider';
@@ -12,27 +12,33 @@ import { useNavigate } from 'react-router-dom';
 import Introduction from '@/components/Introduction';
 const LandingPage = () => {
     const [slidePosition, setSlidePosition] = useState(0);
-
     const navigate = useNavigate();
-    const slideItems = [
-        { title: 'Slide 1', img: `${i1}` },
-        { title: 'Slide 2', img: `${i2}` },
-        { title: 'Slide 3', img: `${i3}` },
-        { title: 'Slide 4', img: `${i5}` },
-        { title: 'Slide 5', img: `${i6}` },
-        { title: 'Slide 6', img: `${i6}` },
-    ];
+    const slideItems = useMemo(
+        () => [
+            { title: 'Slide 1', img: `${i1}` },
+            { title: 'Slide 2', img: `${i2}` },
+            { title: 'Slide 3', img: `${i3}` },
+            { title: 'Slide 4', img: `${i5}` },
+            { title: 'Slide 5', img: `${i6}` },
+            { title: 'Slide 6', img: `${i6}` },
+        ],
+        [],
+    );
     const totalSlides = slideItems.length;
 
-    const handleNextSlide = (direction: string) => {
-        let nextPosition;
-        if (direction === 'forward') {
-            nextPosition = (slidePosition + 1) % totalSlides;
-        } else {
-            nextPosition = (slidePosition - 1 + totalSlides) % totalSlides;
-        }
-        setSlidePosition(nextPosition);
-    };
+    const handleNextSlide = useCallback(
+        (direction: string) => {
+            setSlidePosition((prevPosition) => {
+                if (direction === 'forward') {
+                    return (prevPosition + 1) % totalSlides;
+                } else {
+                    return (prevPosition - 1 + totalSlides) % totalSlides;
+                }
+            });
+        },
+        [totalSlides],
+    );
+
     return (
         <div className=" flex flex-col ">
             <div className="w-[25%] max-md:w-full">
