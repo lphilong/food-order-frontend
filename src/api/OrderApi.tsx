@@ -24,7 +24,7 @@ export const useGetMyOrders = () => {
         return response.json();
     };
 
-    const { data: orders, isLoading } = useQuery('fetchMyOrders', getMyOrdersRequest, {
+    const { data: orders = [], isLoading } = useQuery('fetchMyOrders', getMyOrdersRequest, {
         refetchInterval: 5000,
     });
 
@@ -77,7 +77,7 @@ export const useGetOrdersByRestaurant = (restaurantId?: string) => {
     };
 
     const {
-        data: orders,
+        data: orders = [],
         isLoading,
         error,
     } = useQuery(['fetchOrdersByRestaurant', restaurantId], getGetOrdersByRestaurant, {
