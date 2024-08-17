@@ -18,7 +18,7 @@ export const useGetAllRestaurants = () => {
         return response.json();
     };
 
-    const { data: restaurant, isLoading } = useQuery('fetchMyRestaurant', getAllRestaurantsRequest);
+    const { data: restaurant = [], isLoading } = useQuery('fetchMyRestaurant', getAllRestaurantsRequest);
 
     return { restaurant, isLoading };
 };
@@ -46,11 +46,7 @@ export const useGetRestaurantsByUser = () => {
         return response.json();
     };
 
-    const { data: restaurants = [], isLoading } = useQuery('fetchRestaurantsByUser', getRestaurantsByUser, {
-        staleTime: 60000, // 1 minute
-        cacheTime: 300000, // 5 minutes
-        refetchOnWindowFocus: false,
-    });
+    const { data: restaurants = [], isLoading } = useQuery('fetchRestaurantsByUser', getRestaurantsByUser);
 
     return { restaurants, isLoading };
 };
@@ -193,7 +189,7 @@ export const useGetMyRestaurantOrders = () => {
         return response.json();
     };
 
-    const { data: orders, isLoading } = useQuery('fetchMyRestaurantOrders', getMyRestaurantOrdersRequest);
+    const { data: orders = [], isLoading } = useQuery('fetchMyRestaurantOrders', getMyRestaurantOrdersRequest);
 
     return { orders, isLoading };
 };
