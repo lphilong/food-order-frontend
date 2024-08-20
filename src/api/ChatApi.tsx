@@ -5,13 +5,13 @@ import { useMutation, useQuery } from 'react-query';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 //get message between user and restaurant
-export const useGetMessage = (restaurantId: string, userId: string) => {
+export const useGetMessage = (restaurantId: string) => {
     const { getAccessTokenSilently } = useAuth0();
 
     const getMessageRequest = async (): Promise<Message[]> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api/chat/${restaurantId}/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/chat/${restaurantId}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -24,33 +24,7 @@ export const useGetMessage = (restaurantId: string, userId: string) => {
         return response.json();
     };
 
-    const { data: messages = [], isLoading } = useQuery(['fetchChatMessages', restaurantId, userId], getMessageRequest);
-
-    return { messages, isLoading };
-};
-
-export const useGetNewMessages = () => {
-    const { getAccessTokenSilently } = useAuth0();
-
-    const getNewMessagesRequest = async (): Promise<Message[]> => {
-        const accessToken = await getAccessTokenSilently();
-
-        const response = await fetch(`${API_BASE_URL}/api/chat/new`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to get messages');
-        }
-
-        return response.json();
-    };
-
-    const { data: messages, isLoading } = useQuery('fetchNewMessages', getNewMessagesRequest, {
-        refetchInterval: 5000,
-    });
+    const { data: messages = [], isLoading } = useQuery(['fetchChatMessages', restaurantId], getMessageRequest);
 
     return { messages, isLoading };
 };
@@ -61,7 +35,7 @@ export const useGetUsersWithLastMessage = (restaurantId: string) => {
     const getUsersWithLastMessageRequest = async (): Promise<Message[]> => {
         const accessToken = await getAccessTokenSilently();
 
-        const response = await fetch(`${API_BASE_URL}/api/chat/${restaurantId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/chat/last/${restaurantId}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -91,7 +65,7 @@ export const useGetUsersWithLastMessage = (restaurantId: string) => {
 export const useAddChat = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const addChatRequest = async (chatData: { userId: string; restaurantId: string; content: string; senderId: string }): Promise<Message> => {
+    const addChatRequest = async (chatData: { restaurantId: string; content: string; senderId: string }): Promise<Message> => {
         const accessToken = await getAccessTokenSilently();
 
         const response = await fetch(`${API_BASE_URL}/api/chat`, {
