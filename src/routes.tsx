@@ -93,7 +93,7 @@ const privateRoute = [
         protected: true,
     },
     {
-        path: '/chat/:restaurantId/:userId',
+        path: '/chat/:restaurantId',
         element: (
             <Layout>
                 <ChatPage />
