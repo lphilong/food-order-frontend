@@ -1,4 +1,3 @@
-import { useGetNewMessages } from '@/api/ChatApi';
 import { useGetNewOrders } from '@/api/OrderApi';
 import { useCreateMyRestaurant, useGetRestaurantsByUser } from '@/api/RestaurantApi';
 import ConversationCard from '@/components/ConversationCard';
@@ -9,15 +8,13 @@ import OrderRestaurantLoader from '@/components/SkeletonLoader/OrderRestaurantLo
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CreateRestaurantForm from '@/form/restaurant-form/CreateRestaurantForm';
 import usePagination from '@/hooks/usePagination';
-import { Message, Order } from '@/types';
+import { Order } from '@/types';
 import { useEffect, useState } from 'react';
 
 const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
     const { restaurants, isLoading } = useGetRestaurantsByUser();
     const { orders } = useGetNewOrders();
-    const { messages } = useGetNewMessages();
-    const [newMessages, setNewMessages] = useState<Message[]>([]);
     const [newOrders, setNewOrders] = useState<Order[]>([]);
     const pageSize = 6;
     const {
@@ -42,9 +39,6 @@ const ManageRestaurantPage = () => {
     useEffect(() => {
         setNewOrders(orders || []);
     }, [orders]);
-    useEffect(() => {
-        setNewMessages(messages || []);
-    }, [messages]);
 
     return (
         <Tabs defaultValue="orders">
@@ -63,12 +57,7 @@ const ManageRestaurantPage = () => {
                     </div>
                 ) : (
                     visibleConversations.map((restaurant) => (
-                        <ConversationCard
-                            key={restaurant._id}
-                            restaurant={restaurant}
-                            link={`/conversations/${restaurant._id}`}
-                            hasNewMessage={newMessages.some((message) => message.restaurant._id === restaurant._id)}
-                        />
+                        <ConversationCard key={restaurant._id} restaurant={restaurant} link={`/conversations/${restaurant._id}`} />
                     ))
                 )}
                 {!isLoading && (

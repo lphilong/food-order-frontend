@@ -24,8 +24,8 @@ const ConversationsListPage = () => {
             ) : (
                 <div className="bg-gray-50 p-10 rounded-lg mt-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                        {conversations.map((conversation) => (
-                            <UserCard key={conversation._id} message={conversation} link={`/chat/${restaurantId}/${conversation.user._id}`} />
+                        {conversations.map((conversation, i) => (
+                            <UserCard key={i} message={conversation} link={`/chat/${restaurantId}`} />
                         ))}
                     </div>
                 </div>
