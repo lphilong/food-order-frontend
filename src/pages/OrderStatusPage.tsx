@@ -15,8 +15,8 @@ const OrderStatusPage = () => {
     const { currentPage, totalPages, visibleItems: visibleOrders, handlePageChange } = usePagination(orders || [], pageSize);
     const navigate = useNavigate();
 
-    const handleChatNavigation = (restaurantId: string) => {
-        navigate(`/chat/${restaurantId}`);
+    const handleChatNavigation = (restaurantId: string, userId: string) => {
+        navigate(`/chat/${restaurantId}/${userId}`);
     };
     if (isLoading) {
         return (
@@ -50,7 +50,10 @@ const OrderStatusPage = () => {
                             <OrderStatusDetail order={order} />
                         </div>
                     </Suspense>
-                    <button onClick={() => handleChatNavigation(order.restaurant._id)} className="mt-4 w-full bg-blue-500 text-white p-2 rounded-lg">
+                    <button
+                        onClick={() => handleChatNavigation(order.restaurant._id, order.user._id)}
+                        className="mt-4 w-full bg-blue-500 text-white p-2 rounded-lg"
+                    >
                         Chat with Restaurant
                     </button>
                 </div>

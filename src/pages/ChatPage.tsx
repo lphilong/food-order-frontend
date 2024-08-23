@@ -6,38 +6,30 @@ import { useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 
 const ChatPage = () => {
-    const { restaurantId } = useParams<{ restaurantId: string }>();
+    const { restaurantId, userId } = useParams<{ restaurantId: string; userId: string }>();
     const [messages, setMessages] = useState<Message[]>([]);
     const [content, setContent] = useState('');
     const socketRef = useRef<Socket | null>(null);
-    const { messages: fetchedMessages, isLoading: isLoadingMessages } = useGetMessage(restaurantId || '');
+    const { messages: fetchedMessages, isLoading: isLoadingMessages } = useGetMessage(restaurantId || '', userId || '');
     const { addChat, isLoading: isSendingMessage } = useAddChat();
     const { currentUser } = useGetMyUser();
-
     useEffect(() => {
         const SERVER_URL = import.meta.env.VITE_API_BASE_URL;
-
         if (!restaurantId) return;
 
-        // Create the socket connection
         const socket = io(`${SERVER_URL}`);
         socketRef.current = socket;
 
-        // Join a specific room
-        socket.emit('joinRoom', { restaurantId });
+        socket.emit('joinRoom', { restaurantId, userId });
 
-        // Listen for incoming messages
         socket.on('newMessage', (message: Message) => {
-            console.log('Received new message:', message);
-
             setMessages((prevMessages) => [...prevMessages, message]);
         });
 
-        // Cleanup on component unmount
         return () => {
             socket.disconnect();
         };
-    }, [restaurantId]);
+    }, [restaurantId, userId]);
 
     useEffect(() => {
         if (fetchedMessages) {
@@ -46,16 +38,18 @@ const ChatPage = () => {
     }, [fetchedMessages]);
 
     const handleSendMessage = useCallback(async () => {
-        if (restaurantId && content) {
+        if (restaurantId && content && userId) {
             const newMessage: Message = {
                 restaurantId,
+                userId,
                 content,
                 timestamp: new Date(),
                 senderId: currentUser?._id || '',
+                lastMessage: { content: '', createdAt: '' },
             };
 
             addChat(
-                { restaurantId, content, senderId: currentUser?._id || '' },
+                { userId, restaurantId, content, senderId: currentUser?._id || '' },
                 {
                     onSuccess: () => {
                         socketRef.current?.emit('sendMessage', newMessage);
@@ -69,7 +63,7 @@ const ChatPage = () => {
         } else {
             console.error('Missing restaurantId, or message');
         }
-    }, [restaurantId, content, currentUser?._id, addChat]);
+    }, [restaurantId, content, userId, currentUser?._id, addChat]);
     return (
         <div className="bg-gray-100 h-screen flex items-center justify-center">
             <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg flex flex-col h-full">

@@ -88,6 +88,12 @@ export type CheckoutSessionRequest = {
 export type Message = {
     restaurantId: string;
     content: string;
+    userId: string;
     timestamp: Date;
     senderId: string;
+    lastMessage: LastMessage;
+};
+export type LastMessage = {
+    content: string;
+    createdAt: string;
 };

@@ -11,7 +11,6 @@ import LandingPage from './pages/LandingPage';
 import RestaurantPage from './pages/RestaurantPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import ChatPage from './pages/ChatPage';
-import ConversationsListPage from './pages/ConversationsListPage';
 
 const mRoute = [
     {
@@ -93,7 +92,7 @@ const privateRoute = [
         protected: true,
     },
     {
-        path: '/chat/:restaurantId',
+        path: '/chat/:restaurantId/:userId',
         element: (
             <Layout>
                 <ChatPage />
@@ -106,15 +105,6 @@ const privateRoute = [
         element: (
             <Layout>
                 <OrderDetailPage />
-            </Layout>
-        ),
-        protected: true,
-    },
-    {
-        path: '/conversations/:restaurantId',
-        element: (
-            <Layout>
-                <ConversationsListPage />
             </Layout>
         ),
         protected: true,
