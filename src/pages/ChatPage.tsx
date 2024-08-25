@@ -1,65 +1,112 @@
-import { useAddChat, useGetMessage } from '@/api/ChatApi';
+import { useAddChat } from '@/api/ChatApi';
 import { useGetMyUser } from '@/api/UserApi';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useGetMessages } from '@/api/ChatApi';
 import { Message } from '@/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
+import BackButton from '@/components/BackButton';
 
 const ChatPage = () => {
     const { restaurantId, userId } = useParams<{ restaurantId: string; userId: string }>();
     const [messages, setMessages] = useState<Message[]>([]);
     const [content, setContent] = useState('');
     const [typingUser, setTypingUser] = useState<string | null>(null);
+    const [showScrollDown, setShowScrollDown] = useState(false);
+    const [isAtBottom, setIsAtBottom] = useState(true);
+    const [pagination, setPagination] = useState<{ before?: string }>({ before: undefined });
+    const [hasMore, setHasMore] = useState(true);
+
     const socketRef = useRef<Socket | null>(null);
-    const { messages: fetchedMessages, isLoading: isLoadingMessages } = useGetMessage(restaurantId || '', userId || '');
+    const { messages: initialMessages, isLoading: initialLoading, getMessagesRequest } = useGetMessages(restaurantId || '', userId || '');
     const { addChat, isLoading: isSendingMessage } = useAddChat();
     const { currentUser } = useGetMyUser();
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
-    //socket
+
+    // Initialize chat messages
+    useEffect(() => {
+        setMessages(initialMessages.slice().reverse());
+    }, [initialMessages]);
+
+    // Initialize socket connection
     useEffect(() => {
         const SERVER_URL = import.meta.env.VITE_API_BASE_URL;
         if (!restaurantId) return;
 
-        const socket = io(`${SERVER_URL}`);
+        const socket = io(SERVER_URL);
         socketRef.current = socket;
 
         socket.emit('joinRoom', { restaurantId, userId });
 
         socket.on('newMessage', (message: Message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
+            const chatContainer = chatContainerRef.current;
+            if (chatContainer && chatContainer.scrollTop + chatContainer.clientHeight >= chatContainer.scrollHeight) {
+                setIsAtBottom(true);
+            } else {
+                setShowScrollDown(true);
+            }
         });
+
         socket.on('typing', ({ userId }) => {
             setTypingUser(userId);
             setTimeout(() => setTypingUser(null), 1000);
         });
+
         return () => {
             socket.disconnect();
         };
     }, [restaurantId, userId]);
 
-    //fetch messages
+    // Load more messages on scroll
     useEffect(() => {
-        if (fetchedMessages) {
-            const reverseMessages = fetchedMessages.slice().reverse();
-            setMessages(reverseMessages);
-        }
-    }, [fetchedMessages]);
-    //scroll to bottom
+        const handleScroll = async () => {
+            if (chatContainerRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+
+                // Calculate if user is at the bottom
+                const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+                setIsAtBottom(atBottom);
+                setShowScrollDown(!atBottom);
+
+                if (scrollTop === 0 && hasMore && !initialLoading) {
+                    const newMessages = await getMessagesRequest(pagination.before);
+                    if (newMessages.length > 0) {
+                        const lastMessageTimestamp = newMessages[newMessages.length - 1].createdAt;
+                        setPagination({ before: lastMessageTimestamp });
+                        setMessages((prevMessages) => [...newMessages, ...prevMessages]);
+                        setHasMore(newMessages.length === 20);
+                    } else {
+                        setHasMore(false);
+                    }
+                }
+            }
+        };
+
+        const container = chatContainerRef.current;
+        container?.addEventListener('scroll', handleScroll);
+        return () => container?.removeEventListener('scroll', handleScroll);
+    }, [getMessagesRequest, hasMore, pagination.before, initialLoading]);
+
+    // Scroll to bottom when messages or typingUser change, only if user is at the bottom
     useEffect(() => {
         const chatContainer = chatContainerRef.current;
-        if (chatContainer) {
+        if (chatContainer && isAtBottom) {
             chatContainer.scrollTop = chatContainer.scrollHeight;
+            setShowScrollDown(false);
         }
-    }, [messages, typingUser]);
-    //show typing
+    }, [messages, typingUser, isAtBottom]);
+
+    // Emit typing event when content changes
     useEffect(() => {
         if (restaurantId && userId && content) {
             socketRef.current?.emit('userTyping', { restaurantId, userId });
         }
     }, [content, restaurantId, userId]);
 
-    //prevent user from sending many messages in short time
+    // Debounced send message
     const debouncedSendMessage = useDebounce(() => {
         if (restaurantId && content && userId) {
             const newMessage: Message = {
@@ -75,7 +122,7 @@ const ChatPage = () => {
                 {
                     onSuccess: () => {
                         socketRef.current?.emit('sendMessage', newMessage);
-                        socketRef.current?.emit('stopTyping', { restaurantId, userId }); // Clear typing indicator
+                        socketRef.current?.emit('stopTyping', { restaurantId, userId });
                         setContent('');
                     },
                     onError: (error) => {
@@ -92,12 +139,23 @@ const ChatPage = () => {
         debouncedSendMessage();
     }, [debouncedSendMessage]);
 
+    // Scroll to bottom when scroll down arrow is clicked
+    const scrollToBottom = () => {
+        const chatContainer = chatContainerRef.current;
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            setShowScrollDown(false);
+            setIsAtBottom(true);
+        }
+    };
+
     return (
         <div className="bg-gray-100 h-screen flex items-center justify-center">
             <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg flex flex-col h-full">
                 {/* Chat Header */}
-                <div className="bg-blue-500 text-white p-4 rounded-t-lg">
-                    <h1 className="text-xl">Chat</h1>
+                <div className="bg-blue-500 text-white p-4 rounded-t-lg flex gap-2 items-center">
+                    <BackButton />
+                    <h1 className="text-xl font-bold text-black">Chat</h1>
                 </div>
                 {/* Chat Messages */}
                 <div className="flex-1 p-4 overflow-y-auto relative" ref={chatContainerRef}>
@@ -111,7 +169,18 @@ const ChatPage = () => {
                     {typingUser && (
                         <div className="p-2 text-gray-500 text-sm">{typingUser === currentUser?._id ? 'Restaurant' : 'User'} is typing...</div>
                     )}
-                    {isLoadingMessages && <p>Loading more...</p>}
+                    {initialLoading && <p>Loading...</p>}
+                    {!hasMore && <div className="absolute top-4 left-0 right-0 text-center text-gray-500">No more messages</div>}{' '}
+                    {/* Scroll Down Arrow */}
+                    {showScrollDown && (
+                        <button
+                            onClick={scrollToBottom}
+                            className="fixed bottom-4 left-1/2 transform -translate-y-[350%] bg-blue-500 text-white py-2 px-5 rounded-full text-xl"
+                            aria-label="Scroll to bottom"
+                        >
+                            ↓
+                        </button>
+                    )}
                 </div>
                 {/* Chat Input */}
                 <div className="p-4 bg-gray-200 rounded-b-lg">
