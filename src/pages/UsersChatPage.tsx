@@ -60,7 +60,9 @@ const UsersChatPage = () => {
                                         <div className="flex flex-col flex-grow w-full">
                                             <p className="text-md text-black mb-2">{user.userInfo.email}</p>
                                             <div className="flex items-center flex-row gap-3 overflow-hidden w-[80%]">
-                                                <p className="text-black flex-1 whitespace-nowrap overflow-hidden text-ellipsis ">{user.content}</p>
+                                                <p className="text-black flex-1 whitespace-nowrap overflow-hidden text-ellipsis ">
+                                                    {user.senderId === user.userInfo._id ? user.content : `Bạn: ${user.content}`}
+                                                </p>
                                                 <p className="text-sm text-black whitespace-nowrap">{formatDate(user.createdAt)}</p>
                                             </div>
                                         </div>
