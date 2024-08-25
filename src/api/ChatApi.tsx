@@ -1,4 +1,4 @@
-import { Message } from '@/types';
+import { LastMessage, Message, NewMessage } from '@/types';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -29,6 +29,55 @@ export const useGetMessage = (restaurantId: string, userId: string) => {
     return { messages, isLoading };
 };
 
+export const useGetNewMessage = () => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    const getNewMessageRequest = async (): Promise<NewMessage[]> => {
+        const accessToken = await getAccessTokenSilently();
+
+        const response = await fetch(`${API_BASE_URL}/api/chat/unread`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get orders');
+        }
+
+        return response.json();
+    };
+
+    const { data: messages, isLoading } = useQuery('fetchNewMessage', getNewMessageRequest, {
+        refetchInterval: 5000,
+    });
+
+    return { messages, isLoading };
+};
+export const useGetLastMessagesWithUserInfo = (restaurantId: string) => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    const getLastMessagesWithUserInfoRequest = async (): Promise<LastMessage[]> => {
+        const accessToken = await getAccessTokenSilently();
+
+        const response = await fetch(`${API_BASE_URL}/api/chat//restaurant/${restaurantId}/with-user-info`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get Last Messages With User Info');
+        }
+        return await response.json();
+    };
+
+    const { data: users = [], isLoading } = useQuery(['fetchLastMessagesWithUserInfo', restaurantId], getLastMessagesWithUserInfoRequest);
+
+    return { users, isLoading };
+};
+
 //add message
 export const useAddChat = () => {
     const { getAccessTokenSilently } = useAuth0();
@@ -49,7 +98,7 @@ export const useAddChat = () => {
             throw new Error('Failed to send message');
         }
 
-        return response.json();
+        return await response.json();
     };
 
     const { mutate: addChat, isLoading } = useMutation(addChatRequest);

@@ -11,6 +11,7 @@ import LandingPage from './pages/LandingPage';
 import RestaurantPage from './pages/RestaurantPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import ChatPage from './pages/ChatPage';
+import UsersChatPage from './pages/UsersChatPage';
 
 const mRoute = [
     {
@@ -105,6 +106,15 @@ const privateRoute = [
         element: (
             <Layout>
                 <OrderDetailPage />
+            </Layout>
+        ),
+        protected: true,
+    },
+    {
+        path: '/conversations/:restaurantId',
+        element: (
+            <Layout>
+                <UsersChatPage />
             </Layout>
         ),
         protected: true,

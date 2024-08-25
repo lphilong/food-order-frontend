@@ -91,9 +91,15 @@ export type Message = {
     userId: string;
     timestamp: Date;
     senderId: string;
-    lastMessage: LastMessage;
+};
+export type NewMessage = {
+    restaurant: Restaurant;
 };
 export type LastMessage = {
+    _id: string;
+    user: string;
+    senderId: string;
     content: string;
     createdAt: string;
+    userInfo: User;
 };

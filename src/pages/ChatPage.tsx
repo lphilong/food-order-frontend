@@ -1,5 +1,6 @@
 import { useAddChat, useGetMessage } from '@/api/ChatApi';
 import { useGetMyUser } from '@/api/UserApi';
+import { useDebounce } from '@/hooks/useDebounce';
 import { Message } from '@/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -9,10 +10,13 @@ const ChatPage = () => {
     const { restaurantId, userId } = useParams<{ restaurantId: string; userId: string }>();
     const [messages, setMessages] = useState<Message[]>([]);
     const [content, setContent] = useState('');
+    const [typingUser, setTypingUser] = useState<string | null>(null);
     const socketRef = useRef<Socket | null>(null);
     const { messages: fetchedMessages, isLoading: isLoadingMessages } = useGetMessage(restaurantId || '', userId || '');
     const { addChat, isLoading: isSendingMessage } = useAddChat();
     const { currentUser } = useGetMyUser();
+    const chatContainerRef = useRef<HTMLDivElement | null>(null);
+    //socket
     useEffect(() => {
         const SERVER_URL = import.meta.env.VITE_API_BASE_URL;
         if (!restaurantId) return;
@@ -25,19 +29,38 @@ const ChatPage = () => {
         socket.on('newMessage', (message: Message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         });
-
+        socket.on('typing', ({ userId }) => {
+            setTypingUser(userId);
+            setTimeout(() => setTypingUser(null), 1000);
+        });
         return () => {
             socket.disconnect();
         };
     }, [restaurantId, userId]);
 
+    //fetch messages
     useEffect(() => {
         if (fetchedMessages) {
-            setMessages(fetchedMessages);
+            const reverseMessages = fetchedMessages.slice().reverse();
+            setMessages(reverseMessages);
         }
     }, [fetchedMessages]);
+    //scroll to bottom
+    useEffect(() => {
+        const chatContainer = chatContainerRef.current;
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }, [messages, typingUser]);
+    //show typing
+    useEffect(() => {
+        if (restaurantId && userId && content) {
+            socketRef.current?.emit('userTyping', { restaurantId, userId });
+        }
+    }, [content, restaurantId, userId]);
 
-    const handleSendMessage = useCallback(async () => {
+    //prevent user from sending many messages in short time
+    const debouncedSendMessage = useDebounce(() => {
         if (restaurantId && content && userId) {
             const newMessage: Message = {
                 restaurantId,
@@ -45,7 +68,6 @@ const ChatPage = () => {
                 content,
                 timestamp: new Date(),
                 senderId: currentUser?._id || '',
-                lastMessage: { content: '', createdAt: '' },
             };
 
             addChat(
@@ -53,6 +75,7 @@ const ChatPage = () => {
                 {
                     onSuccess: () => {
                         socketRef.current?.emit('sendMessage', newMessage);
+                        socketRef.current?.emit('stopTyping', { restaurantId, userId }); // Clear typing indicator
                         setContent('');
                     },
                     onError: (error) => {
@@ -63,29 +86,32 @@ const ChatPage = () => {
         } else {
             console.error('Missing restaurantId, or message');
         }
-    }, [restaurantId, content, userId, currentUser?._id, addChat]);
+    }, 300);
+
+    const handleSendMessage = useCallback(() => {
+        debouncedSendMessage();
+    }, [debouncedSendMessage]);
+
     return (
         <div className="bg-gray-100 h-screen flex items-center justify-center">
             <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg flex flex-col h-full">
                 {/* Chat Header */}
                 <div className="bg-blue-500 text-white p-4 rounded-t-lg">
-                    <h1 className="text-xl">Chat with Restaurant</h1>
+                    <h1 className="text-xl">Chat</h1>
                 </div>
                 {/* Chat Messages */}
-                <div className="flex-1 p-4 overflow-y-auto" id="messages">
-                    {isLoadingMessages ? (
-                        <p>Loading messages...</p>
-                    ) : (
-                        messages.map((msg, index) => {
-                            return (
-                                <div key={index} className={`flex ${msg.senderId === currentUser?._id ? 'justify-end' : 'justify-start'} mb-4`}>
-                                    <div className={`p-4 rounded-lg max-w-xs ${msg.senderId === currentUser?._id ? 'bg-green-200' : 'bg-gray-200'}`}>
-                                        <p>{msg.content}</p>
-                                    </div>
-                                </div>
-                            );
-                        })
+                <div className="flex-1 p-4 overflow-y-auto relative" ref={chatContainerRef}>
+                    {messages.map((msg, index) => (
+                        <div key={index} className={`flex ${msg.senderId === currentUser?._id ? 'justify-end' : 'justify-start'} mb-4`}>
+                            <div className={`p-4 rounded-lg max-w-xs ${msg.senderId === currentUser?._id ? 'bg-green-200' : 'bg-gray-200'} `}>
+                                <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                            </div>
+                        </div>
+                    ))}
+                    {typingUser && (
+                        <div className="p-2 text-gray-500 text-sm">{typingUser === currentUser?._id ? 'Restaurant' : 'User'} is typing...</div>
                     )}
+                    {isLoadingMessages && <p>Loading more...</p>}
                 </div>
                 {/* Chat Input */}
                 <div className="p-4 bg-gray-200 rounded-b-lg">
