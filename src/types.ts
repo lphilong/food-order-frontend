@@ -86,6 +86,7 @@ export type CheckoutSessionRequest = {
     restaurantId: string;
 };
 export type Message = {
+    _id: string;
     restaurantId: string;
     content: string;
     userId: string;

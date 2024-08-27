@@ -88,7 +88,7 @@ const ChatPage = () => {
         const container = chatContainerRef.current;
         container?.addEventListener('scroll', handleScroll);
         return () => container?.removeEventListener('scroll', handleScroll);
-    }, [getMessagesRequest, hasMore, pagination.before, initialLoading]);
+    }, [getMessagesRequest, hasMore, pagination.before, initialLoading, isAtBottom, messages, currentUser?._id]);
 
     // Scroll to bottom when messages or typingUser change, only if user is at the bottom
     useEffect(() => {
@@ -110,6 +110,7 @@ const ChatPage = () => {
     const debouncedSendMessage = useDebounce(() => {
         if (restaurantId && content && userId) {
             const newMessage: Message = {
+                _id: '',
                 restaurantId,
                 userId,
                 content,
@@ -162,7 +163,7 @@ const ChatPage = () => {
                     {messages.map((msg, index) => (
                         <div key={index} className={`flex ${msg.senderId === currentUser?._id ? 'justify-end' : 'justify-start'} mb-4`}>
                             <div className={`p-4 rounded-lg max-w-xs ${msg.senderId === currentUser?._id ? 'bg-green-200' : 'bg-gray-200'} `}>
-                                <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                                <p className="whitespace-pre-wrap break-words">{msg.content}</p>{' '}
                             </div>
                         </div>
                     ))}

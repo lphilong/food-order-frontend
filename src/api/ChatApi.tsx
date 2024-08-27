@@ -78,6 +78,8 @@ export const useGetNewMessage = () => {
 
     return { messages, isLoading };
 };
+
+//get user with last message
 export const useGetLastMessagesWithUserInfo = (restaurantId: string) => {
     const { getAccessTokenSilently } = useAuth0();
 

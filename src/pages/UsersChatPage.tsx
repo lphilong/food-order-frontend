@@ -11,6 +11,7 @@ const UsersChatPage = () => {
     const { restaurantId } = useParams<{ restaurantId: string }>();
     const [users, setUsers] = useState<LastMessage[]>([]);
     const { users: fetchUsers, isLoading } = useGetLastMessagesWithUserInfo(restaurantId || '');
+
     const pageSize = 9;
     const {
         currentPage: currentUsersPage,
