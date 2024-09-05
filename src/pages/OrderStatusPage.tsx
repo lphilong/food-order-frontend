@@ -6,8 +6,8 @@ import OrderStatusLoader from '@/components/SkeletonLoader/OrderStatusLoader';
 import usePagination from '@/hooks/usePagination';
 import { useNavigate } from 'react-router-dom';
 
-const OrderStatusDetail = lazy(() => import('@/components/OrderStatusDetail'));
-const OrderStatusHeader = lazy(() => import('@/components/OrderStatusHeader'));
+const OrderStatusDetail = lazy(() => import('@/components/Order/OrderStatusDetail'));
+const OrderStatusHeader = lazy(() => import('@/components/Order/OrderStatusHeader'));
 
 const OrderStatusPage = () => {
     const { orders, isLoading } = useGetMyOrders();

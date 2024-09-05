@@ -15,7 +15,7 @@ const UpdateRestaurant = () => {
         try {
             const confirmed = confirm('Are you sure you want to delete the restaurant?');
             if (confirmed) {
-                await deleteRestaurant();
+                deleteRestaurant();
                 alert('Restaurant deleted successfully');
             }
         } catch (error) {

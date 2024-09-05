@@ -1,7 +1,7 @@
 import { useGetRestaurantById } from '@/api/SearchApi';
 import MenuItem from '@/components/MenuItem';
-import OrderSummary from '@/components/OrderSummary';
-import RestaurantInfo from '@/components/RestaurantInfo';
+import OrderSummary from '@/components/Order/OrderSummary';
+import RestaurantInfo from '@/components/Restaurant/RestaurantInfo';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardFooter } from '@/components/ui/card';
 import { useCallback, useEffect, useState } from 'react';

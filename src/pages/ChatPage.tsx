@@ -1,4 +1,3 @@
-import { useAddChat } from '@/api/ChatApi';
 import { useGetMyUser } from '@/api/UserApi';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useGetMessages } from '@/api/ChatApi';
@@ -6,21 +5,25 @@ import { Message } from '@/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
-import BackButton from '@/components/BackButton';
+import ChatContent from '@/components/Chat/ChatContent';
+import ChatHeader from '@/components/Chat/ChatHeader';
+import ChatInput from '@/components/Chat/ChatInput';
 
 const ChatPage = () => {
     const { restaurantId, userId } = useParams<{ restaurantId: string; userId: string }>();
     const [messages, setMessages] = useState<Message[]>([]);
     const [content, setContent] = useState('');
+    const [isSendingMessage, setIsSendingMessage] = useState(false);
     const [typingUser, setTypingUser] = useState<string | null>(null);
     const [showScrollDown, setShowScrollDown] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const [pagination, setPagination] = useState<{ before?: string }>({ before: undefined });
     const [hasMore, setHasMore] = useState(true);
+    const [lastSentMessageId, setLastSentMessageId] = useState<string | null>(null);
+    const [sendError, setSendError] = useState<string | null>(null);
 
     const socketRef = useRef<Socket | null>(null);
     const { messages: initialMessages, isLoading: initialLoading, getMessagesRequest } = useGetMessages(restaurantId || '', userId || '');
-    const { addChat, isLoading: isSendingMessage } = useAddChat();
     const { currentUser } = useGetMyUser();
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,7 +43,7 @@ const ChatPage = () => {
         socket.emit('joinRoom', { restaurantId, userId });
 
         socket.on('newMessage', (message: Message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
+            setMessages((prevMessages) => [...prevMessages, { ...message, isSent: false }]);
             const chatContainer = chatContainerRef.current;
             if (chatContainer && chatContainer.scrollTop + chatContainer.clientHeight >= chatContainer.scrollHeight) {
                 setIsAtBottom(true);
@@ -48,7 +51,16 @@ const ChatPage = () => {
                 setShowScrollDown(true);
             }
         });
+        socket.on('messageSent', ({ messageId }) => {
+            setLastSentMessageId(messageId);
+            setIsSendingMessage(false);
+            setSendError(null);
+        });
 
+        socket.on('sendMessageError', ({ error }) => {
+            setIsSendingMessage(false);
+            setSendError(`Failed to send message: ${error}`);
+        });
         socket.on('typing', ({ userId }) => {
             setTypingUser(userId);
             setTimeout(() => setTypingUser(null), 1000);
@@ -108,31 +120,22 @@ const ChatPage = () => {
 
     // Debounced send message
     const debouncedSendMessage = useDebounce(() => {
-        if (restaurantId && content && userId) {
-            const newMessage: Message = {
-                _id: '',
-                restaurantId,
+        if (restaurantId && content.trim() && userId) {
+            setIsSendingMessage(true);
+            setLastSentMessageId(null);
+            setSendError(null);
+            socketRef.current?.emit('sendMessage', {
                 userId,
+                restaurantId,
                 content,
                 timestamp: new Date(),
                 senderId: currentUser?._id || '',
-            };
+            });
 
-            addChat(
-                { userId, restaurantId, content, senderId: currentUser?._id || '' },
-                {
-                    onSuccess: () => {
-                        socketRef.current?.emit('sendMessage', newMessage);
-                        socketRef.current?.emit('stopTyping', { restaurantId, userId });
-                        setContent('');
-                    },
-                    onError: (error) => {
-                        console.error('Failed to send message:', error);
-                    },
-                },
-            );
+            socketRef.current?.emit('stopTyping', { restaurantId, userId });
+            setContent('');
         } else {
-            console.error('Missing restaurantId, or message');
+            console.error('Missing restaurantId, content, or userId');
         }
     }, 300);
 
@@ -154,61 +157,27 @@ const ChatPage = () => {
         <div className="bg-gray-100 h-screen flex items-center justify-center">
             <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg flex flex-col h-full">
                 {/* Chat Header */}
-                <div className="bg-blue-500 text-white p-4 rounded-t-lg flex gap-2 items-center">
-                    <BackButton />
-                    <h1 className="text-xl font-bold text-black">Chat</h1>
-                </div>
+                <ChatHeader />
                 {/* Chat Messages */}
-                <div className="flex-1 p-4 overflow-y-auto relative" ref={chatContainerRef}>
-                    {messages.map((msg, index) => (
-                        <div key={index} className={`flex ${msg.senderId === currentUser?._id ? 'justify-end' : 'justify-start'} mb-4`}>
-                            <div className={`p-4 rounded-lg max-w-xs ${msg.senderId === currentUser?._id ? 'bg-green-200' : 'bg-gray-200'} `}>
-                                <p className="whitespace-pre-wrap break-words">{msg.content}</p>{' '}
-                            </div>
-                        </div>
-                    ))}
-                    {typingUser && (
-                        <div className="p-2 text-gray-500 text-sm">{typingUser === currentUser?._id ? 'Restaurant' : 'User'} is typing...</div>
-                    )}
-                    {initialLoading && <p>Loading...</p>}
-                    {!hasMore && <div className="absolute top-4 left-0 right-0 text-center text-gray-500">No more messages</div>}{' '}
-                    {/* Scroll Down Arrow */}
-                    {showScrollDown && (
-                        <button
-                            onClick={scrollToBottom}
-                            className="fixed bottom-4 left-1/2 transform -translate-y-[350%] bg-blue-500 text-white py-2 px-5 rounded-full text-xl"
-                            aria-label="Scroll to bottom"
-                        >
-                            ↓
-                        </button>
-                    )}
-                </div>
+                <ChatContent
+                    messages={messages}
+                    currentUserId={currentUser?._id || ''}
+                    chatContainerRef={chatContainerRef}
+                    typingUser={typingUser}
+                    showScrollDown={showScrollDown}
+                    scrollToBottom={scrollToBottom}
+                    initialLoading={initialLoading}
+                    hasMore={hasMore}
+                    lastSentMessageId={lastSentMessageId}
+                    sendError={sendError}
+                />
                 {/* Chat Input */}
-                <div className="p-4 bg-gray-200 rounded-b-lg">
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleSendMessage();
-                        }}
-                    >
-                        <input
-                            type="text"
-                            placeholder="Type your message..."
-                            className="w-full p-2 rounded-lg border border-gray-300"
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            aria-label="Type your message"
-                        />
-                        <button
-                            type="submit"
-                            className="mt-2 w-full bg-blue-500 text-white p-2 rounded-lg"
-                            aria-label="Send message"
-                            disabled={isSendingMessage}
-                        >
-                            {isSendingMessage ? 'Sending...' : 'Send'}
-                        </button>
-                    </form>
-                </div>
+                <ChatInput
+                    content={content}
+                    isSendingMessage={isSendingMessage}
+                    onChange={(e) => setContent(e.target.value)}
+                    onSubmit={handleSendMessage}
+                />
             </div>
         </div>
     );

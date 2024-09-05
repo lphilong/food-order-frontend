@@ -1,15 +1,15 @@
 import { useGetNewOrders } from '@/api/OrderApi';
 import { useCreateMyRestaurant, useGetRestaurantsByUser } from '@/api/RestaurantApi';
 import PaginationSelector from '@/components/PaginationSelector';
-import RestaurantCard from '@/components/RestaurantCard';
-import RestaurantResultCard from '@/components/RestaurantResultCard';
+import RestaurantCard from '@/components/Restaurant/RestaurantCard';
+import RestaurantResultCard from '@/components/Restaurant/RestaurantResultCard';
 import OrderRestaurantLoader from '@/components/SkeletonLoader/OrderRestaurantLoader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CreateRestaurantForm from '@/form/restaurant-form/CreateRestaurantForm';
 import usePagination from '@/hooks/usePagination';
 import { Order } from '@/types';
 import { useEffect, useState } from 'react';
-import RestaurantsForChat from '../components/RestaurantsForChat';
+import RestaurantsForChat from '../components/Restaurant/RestaurantsForChat';
 
 const ManageRestaurantPage = () => {
     const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();

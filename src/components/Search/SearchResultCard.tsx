@@ -1,18 +1,15 @@
 import { Restaurant } from '@/types';
 import { Link } from 'react-router-dom';
-import { AspectRatio } from './ui/aspect-ratio';
+import { AspectRatio } from '../ui/aspect-ratio';
 import { Banknote, Clock, Dot } from 'lucide-react';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 type Props = {
+    restaurant: Restaurant;
     link: string;
-    restaurant?: Restaurant;
 };
 
-const RestaurantResultCard = ({ restaurant, link }: Props) => {
-    if (!restaurant) {
-        return <div>No restaurant data available.</div>;
-    }
+const SearchResultCard = ({ restaurant, link }: Props) => {
     return (
         <Link to={link} className="grid lg:grid-cols-[2fr_3fr] gap-5 group bg-gray-50 p-5">
             <AspectRatio ratio={16 / 9}>
@@ -23,7 +20,7 @@ const RestaurantResultCard = ({ restaurant, link }: Props) => {
                 <div id="card-content" className="grid md:grid-cols-2 gap-2">
                     <div className="flex flex-row flex-wrap">
                         {restaurant.cuisines.map((item, index) => (
-                            <span key={index} className="flex">
+                            <span className="flex">
                                 <span>{item}</span>
                                 {index < restaurant.cuisines.length - 1 && <Dot />}
                             </span>
@@ -45,4 +42,4 @@ const RestaurantResultCard = ({ restaurant, link }: Props) => {
     );
 };
 
-export default RestaurantResultCard;
+export default SearchResultCard;

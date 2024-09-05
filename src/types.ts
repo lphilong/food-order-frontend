@@ -92,6 +92,7 @@ export type Message = {
     userId: string;
     timestamp: Date;
     senderId: string;
+    isSent: boolean;
 };
 export type NewMessage = {
     restaurant: Restaurant;

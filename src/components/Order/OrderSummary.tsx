@@ -1,10 +1,10 @@
 import { CartItem } from '@/types';
 import { Restaurant } from '@/types';
-import { CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
+import { CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Separator } from '../ui/separator';
 import { Trash } from 'lucide-react';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 type Props = {
     restaurant: Restaurant;

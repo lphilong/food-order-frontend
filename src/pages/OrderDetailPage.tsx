@@ -1,6 +1,6 @@
 import { useGetOrdersByRestaurant } from '@/api/OrderApi';
 import BackButton from '@/components/BackButton';
-import OrderItemCard from '@/components/OrderItemCard';
+import OrderItemCard from '@/components/Order/OrderItemCard';
 import { useMemo, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 

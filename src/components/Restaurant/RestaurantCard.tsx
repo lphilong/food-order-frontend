@@ -1,6 +1,6 @@
 import { Restaurant } from '@/types';
 import { Link } from 'react-router-dom';
-import { AspectRatio } from './ui/aspect-ratio';
+import { AspectRatio } from '../ui/aspect-ratio';
 import { useGetOrdersByRestaurant } from '@/api/OrderApi';
 import { useEffect, useState } from 'react';
 

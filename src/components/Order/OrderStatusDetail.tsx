@@ -1,6 +1,6 @@
-import { AspectRatio } from './ui/aspect-ratio';
+import { AspectRatio } from '../ui/aspect-ratio';
 import { Banknote, Clock } from 'lucide-react';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency } from '../../utils/formatCurrency';
 import { Order } from '@/types';
 
 type Props = {

@@ -1,9 +1,9 @@
 import { Order, OrderStatus } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Separator } from './ui/separator';
-import { Badge } from './ui/badge';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { ORDER_STATUS } from '@/config/orderStatus';
 import { useUpdateMyRestaurantOrder } from '@/api/RestaurantApi';
 import { useEffect, useMemo, useState } from 'react';

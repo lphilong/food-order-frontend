@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllRestaurants } from '@/api/RestaurantApi';
-import SearchBar, { SearchForm } from '@/components/SearchBar';
+import SearchBar, { SearchForm } from '@/components/Search/SearchBar';
 import PaginationSelector from '@/components/PaginationSelector';
 import RestaurantPageLoader from '@/components/SkeletonLoader/RestaurantPageLoader';
 import usePagination from '@/hooks/usePagination';
 import { Restaurant } from '@/types';
 import BackButton from '@/components/BackButton';
 
-const SearchResultCard = lazy(() => import('@/components/SearchResultCard'));
+const SearchResultCard = lazy(() => import('@/components/Search/SearchResultCard'));
 
 const RestaurantPage: React.FC = React.memo(() => {
     const navigate = useNavigate();
