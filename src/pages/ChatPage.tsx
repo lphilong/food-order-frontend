@@ -41,9 +41,14 @@ const ChatPage = () => {
         socketRef.current = socket;
 
         socket.emit('joinRoom', { restaurantId, userId });
-
         socket.on('newMessage', (message: Message) => {
-            setMessages((prevMessages) => [...prevMessages, { ...message, isSent: false }]);
+            setMessages((prevMessages) => {
+                // Avoid duplicating messages
+                if (!prevMessages.some((msg) => msg._id === message._id)) {
+                    return [...prevMessages, { ...message, isSent: false }];
+                }
+                return prevMessages;
+            });
             const chatContainer = chatContainerRef.current;
             if (chatContainer && chatContainer.scrollTop + chatContainer.clientHeight >= chatContainer.scrollHeight) {
                 setIsAtBottom(true);
@@ -77,18 +82,24 @@ const ChatPage = () => {
             if (chatContainerRef.current) {
                 const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
 
-                // Calculate if user is at the bottom
                 const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-
                 setIsAtBottom(atBottom);
                 setShowScrollDown(!atBottom);
 
                 if (scrollTop === 0 && hasMore && !initialLoading) {
-                    const newMessages = await getMessagesRequest(pagination.before);
+                    const newMessages: Message[] = await getMessagesRequest(pagination.before);
                     if (newMessages.length > 0) {
                         const lastMessageTimestamp = newMessages[newMessages.length - 1].createdAt;
                         setPagination({ before: lastMessageTimestamp });
-                        setMessages((prevMessages) => [...newMessages, ...prevMessages]);
+
+                        setMessages((prevMessages) => {
+                            const prevMessageIds = new Set(prevMessages.map((msg) => msg._id));
+                            const filteredNewMessages = newMessages
+                                .filter((msg) => !prevMessageIds.has(msg._id))
+                                .slice()
+                                .reverse();
+                            return [...filteredNewMessages, ...prevMessages];
+                        });
                         setHasMore(newMessages.length === 20);
                     } else {
                         setHasMore(false);
@@ -100,7 +111,7 @@ const ChatPage = () => {
         const container = chatContainerRef.current;
         container?.addEventListener('scroll', handleScroll);
         return () => container?.removeEventListener('scroll', handleScroll);
-    }, [getMessagesRequest, hasMore, pagination.before, initialLoading, isAtBottom, messages, currentUser?._id]);
+    }, [getMessagesRequest, hasMore, pagination.before, initialLoading]);
 
     // Scroll to bottom when messages or typingUser change, only if user is at the bottom
     useEffect(() => {
@@ -128,7 +139,7 @@ const ChatPage = () => {
                 userId,
                 restaurantId,
                 content,
-                timestamp: new Date(),
+                createdAt: new Date(),
                 senderId: currentUser?._id || '',
             });
 
