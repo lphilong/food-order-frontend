@@ -90,13 +90,11 @@ export type Message = {
     restaurantId: string;
     content: string;
     userId: string;
-    timestamp: Date;
+    createdAt: string;
     senderId: string;
     isSent: boolean;
 };
-export type NewMessage = {
-    restaurant: Restaurant;
-};
+
 export type LastMessage = {
     _id: string;
     user: string;

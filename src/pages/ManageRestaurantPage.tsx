@@ -16,6 +16,7 @@ const ManageRestaurantPage = () => {
     const { restaurants, isLoading } = useGetRestaurantsByUser();
     const { orders } = useGetNewOrders();
     const [newOrders, setNewOrders] = useState<Order[]>([]);
+
     const pageSize = 6;
     const {
         currentPage: currentOrderPage,
