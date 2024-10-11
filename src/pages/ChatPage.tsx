@@ -21,7 +21,6 @@ const ChatPage = () => {
     const [hasMore, setHasMore] = useState(true);
     const [lastSentMessageId, setLastSentMessageId] = useState<string | null>(null);
     const [sendError, setSendError] = useState<string | null>(null);
-
     const socketRef = useRef<Socket | null>(null);
     const { messages: initialMessages, isLoading: initialLoading, getMessagesRequest } = useGetMessages(restaurantId || '', userId || '');
     const { currentUser } = useGetMyUser();
@@ -41,6 +40,7 @@ const ChatPage = () => {
         socketRef.current = socket;
 
         socket.emit('joinRoom', { restaurantId, userId });
+        // Handle new message
         socket.on('newMessage', (message: Message) => {
             setMessages((prevMessages) => {
                 // Avoid duplicating messages
@@ -56,16 +56,18 @@ const ChatPage = () => {
                 setShowScrollDown(true);
             }
         });
+        // Handle message sent
         socket.on('messageSent', ({ messageId }) => {
             setLastSentMessageId(messageId);
             setIsSendingMessage(false);
             setSendError(null);
         });
-
+        // Handle send message error
         socket.on('sendMessageError', ({ error }) => {
             setIsSendingMessage(false);
             setSendError(`Failed to send message: ${error}`);
         });
+        // show who is typing event
         socket.on('typing', ({ userId }) => {
             setTypingUser(userId);
             setTimeout(() => setTypingUser(null), 1000);

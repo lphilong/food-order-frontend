@@ -6,7 +6,6 @@ import PaginationSelector from '@/components/PaginationSelector';
 import RestaurantPageLoader from '@/components/SkeletonLoader/RestaurantPageLoader';
 import usePagination from '@/hooks/usePagination';
 import { Restaurant } from '@/types';
-import BackButton from '@/components/BackButton';
 
 const SearchResultCard = lazy(() => import('@/components/Search/SearchResultCard'));
 
@@ -34,15 +33,6 @@ const RestaurantPage: React.FC = React.memo(() => {
             </Suspense>
         ));
     }, [visibleRestaurants]);
-
-    if (!visibleRestaurants || visibleRestaurants.length === 0) {
-        return (
-            <div className="flex">
-                <BackButton />
-                <span className="pl-5 text-2xl font-bold">No restaurant available</span>
-            </div>
-        );
-    }
     return (
         <div className="flex flex-col gap-12">
             <div className="bg-white rounded-lg shadow-md p-4">

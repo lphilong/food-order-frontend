@@ -92,7 +92,6 @@ export type Message = {
     userId: string;
     createdAt: string;
     senderId: string;
-    isSent: boolean;
 };
 
 export type LastMessage = {
