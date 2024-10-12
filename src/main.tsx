@@ -7,6 +7,7 @@ import AppRoutes from './AppRoutes';
 import Auth0ProviderWithNavigate from './auth/Auth0ProviderWithNavigate';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'sonner';
+import { NetworkProvider } from './context/NetworkContext';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -20,10 +21,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Router>
             <QueryClientProvider client={queryClient}>
-                <Auth0ProviderWithNavigate>
-                    <AppRoutes />
-                    <Toaster visibleToasts={1} position="top-right" richColors />
-                </Auth0ProviderWithNavigate>
+                <NetworkProvider>
+                    <Auth0ProviderWithNavigate>
+                        <AppRoutes />
+                        <Toaster visibleToasts={1} position="top-right" richColors />
+                    </Auth0ProviderWithNavigate>
+                </NetworkProvider>
             </QueryClientProvider>
         </Router>
     </React.StrictMode>,

@@ -12,6 +12,7 @@ import RestaurantPage from './pages/RestaurantPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import ChatPage from './pages/ChatPage';
 import UsersChatPage from './pages/UsersChatPage';
+import OfflinePage from './pages/OfflinePage';
 
 const mRoute = [
     {
@@ -33,6 +34,10 @@ const mRoute = [
     {
         path: '/auth-callback',
         element: <AuthCallbackPage />,
+    },
+    {
+        path: '/offline',
+        element: <OfflinePage />,
     },
     {
         path: '/search/:city',
