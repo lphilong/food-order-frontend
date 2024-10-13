@@ -16,7 +16,12 @@ const ManageRestaurantPage = () => {
     const { restaurants, isLoading } = useGetRestaurantsByUser();
     const { orders } = useGetNewOrders();
     const [newOrders, setNewOrders] = useState<Order[]>([]);
-
+    const [tabList] = useState([
+        { value: 'orders', label: 'Orders' },
+        { value: 'messages', label: 'Messages' },
+        { value: 'create-restaurant', label: 'Create Restaurant' },
+        { value: 'update-restaurant', label: 'Update Restaurant' },
+    ]);
     const pageSize = 6;
     const {
         currentPage: currentOrderPage,
@@ -43,18 +48,22 @@ const ManageRestaurantPage = () => {
 
     return (
         <Tabs defaultValue="orders">
-            <TabsList>
-                <TabsTrigger value="orders">Orders</TabsTrigger>
-                <TabsTrigger value="messages">Messages</TabsTrigger>
-                <TabsTrigger value="create-restaurant">Create Restaurant</TabsTrigger>
-                <TabsTrigger value="update-restaurant">Update Restaurant</TabsTrigger>
+            <TabsList className="flex max-md:flex-wrap justify-between lg:w-[33%]">
+                <div className="flex max-md:overflow-x-auto max-md:space-x-4 ">
+                    {tabList.map((tab) => (
+                        <TabsTrigger key={tab.value} value={tab.value} className="max-md:min-w-[50%] max-md:shrink-0">
+                            {tab.label}
+                        </TabsTrigger>
+                    ))}
+                </div>
             </TabsList>
+
             {/*ORDERS*/}
-            <TabsContent value="orders" className="  rounded-lg grid lg:grid-cols-3 gap-4 mt-10  relative ">
+            <TabsContent value="orders" className="rounded-lg grid grid-cols-1 lg:grid-cols-3 gap-4 mt-10 relative">
                 {isLoading ? (
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (
-                    <div className="mt-10">
+                    <div className="mt-10 text-center">
                         <span className="text-2xl font-bold">Create your restaurant first</span>
                     </div>
                 ) : (
@@ -74,12 +83,13 @@ const ManageRestaurantPage = () => {
                     </div>
                 )}
             </TabsContent>
+
             {/*MESSAGES*/}
-            <TabsContent value="messages" className="  rounded-lg grid lg:grid-cols-3 gap-4   relative ">
+            <TabsContent value="messages" className="rounded-lg grid grid-cols-1 lg:grid-cols-3 gap-4 relative">
                 {isLoading ? (
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (
-                    <div className="mt-10">
+                    <div className="mt-10 text-center">
                         <span className="text-2xl font-bold">Create your restaurant first</span>
                     </div>
                 ) : (
@@ -93,17 +103,19 @@ const ManageRestaurantPage = () => {
                     </div>
                 )}
             </TabsContent>
+
             {/*CREATE-RESTAURANT*/}
             <TabsContent value="create-restaurant">
                 <CreateRestaurantForm onSave={createRestaurant} isLoading={isCreateLoading} />
             </TabsContent>
+
             {/*UPDATE-RESTAURANT*/}
             <TabsContent value="update-restaurant" className="bg-white rounded-lg shadow-md p-4 space-y-4">
                 {!isLoading && <PaginationSelector page={currentRestaurantPage} pages={totalRestaurantPages} onPageChange={handleRestaurantChange} />}
                 {isLoading ? (
                     Array.from({ length: 6 }).map((_, index) => <OrderRestaurantLoader key={index} />)
                 ) : !restaurants || restaurants.length === 0 ? (
-                    <div className="mt-10">
+                    <div className="mt-10 text-center">
                         <span className="text-2xl font-bold">Create your restaurant</span>
                     </div>
                 ) : (

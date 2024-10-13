@@ -38,12 +38,12 @@ const UsersChatPage = () => {
     if (isLoading) return <p>Loading...</p>;
 
     return (
-        <div className="container mx-auto p-6">
-            <h2 className="text-3xl font-semibold mb-6 text-gray-800 flex gap-2">
+        <div>
+            <h2 className="text-3xl font-semibold mb-6 text-gray-800 flex gap-2 max-md:text-2xl">
                 <BackButton />
                 Users Chat List
             </h2>
-            <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="bg-white shadow-lg rounded-lg ">
                 {users.length === 0 ? (
                     <p className="text-center text-gray-600 py-6">No messages found.</p>
                 ) : (

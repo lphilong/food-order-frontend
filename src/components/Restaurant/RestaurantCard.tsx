@@ -36,7 +36,7 @@ const RestaurantCard = ({ restaurant, link, hasNewOrder }: Props) => {
                 <h3 className="text-2xl font-bold tracking-tight mb-2 group-hover:underline text-center">{restaurant.restaurantName}</h3>{' '}
                 <div className="flex justify-center relative ">
                     {hasNewOrder && (
-                        <div className="absolute top-0 right-0 translate-x-[-50%] translate-y-[-15%]">
+                        <div className="absolute top-0 right-0 lg:translate-x-[-50%] max-md:translate-x-[50%] translate-y-[-15%]">
                             <div className="p-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-lg animate-scaleUp">
                                 <h1 className="text-md font-extrabold text-center text-white ">New</h1>
                             </div>

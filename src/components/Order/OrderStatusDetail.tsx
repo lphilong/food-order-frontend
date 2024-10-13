@@ -20,11 +20,12 @@ const OrderStatusDetail = ({ order }: Props) => {
                 <h3 className="text-2xl font-bold tracking-tight mb-2 max-sm:text-xl max-sm:text-center ">{order.restaurant.restaurantName}</h3>
                 <div id="card-content" className="gap-2">
                     <div className="flex flex-col gap-5">
-                        <div className="flex gap-5">
-                            <span className="font-bold">Delivering to:</span>
-                            <span>{order.deliveryDetails.name}</span>
-                            <span>
-                                {order.deliveryDetails.addressLine1}, {order.deliveryDetails.city}
+                        <div className="flex gap-5 flex-col">
+                            <span className="font-bold">
+                                Delivering to:{' '}
+                                <span className="font-normal">
+                                    {order.deliveryDetails.name} , {order.deliveryDetails.addressLine1}, {order.deliveryDetails.city}
+                                </span>
                             </span>
                         </div>
                         <div className="flex flex-col gap-2 ">
