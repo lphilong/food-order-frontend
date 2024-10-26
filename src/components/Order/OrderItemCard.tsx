@@ -46,14 +46,14 @@ const OrderItemCard = ({ order }: Props) => {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="flex flex-col gap-4 mb-3">
-                    <div>
+                <CardTitle className="flex flex-col gap-4 mb-3 ">
+                    <div className="w-full max-md:flex max-md:flex-col">
                         Customer Name:
-                        <span className="ml-2 font-normal">{order.deliveryDetails.name}</span>
+                        <span className=" font-normal  break-words w-full lg:ml-2  ">{order.deliveryDetails.name}</span>
                     </div>
-                    <div>
+                    <div className="w-full max-md:flex max-md:flex-col">
                         Delivery address:
-                        <span className="ml-2 font-normal">
+                        <span className="lg:ml-2 font-normal break-words w-full">
                             {order.deliveryDetails.addressLine1}, {order.deliveryDetails.city}
                         </span>
                     </div>

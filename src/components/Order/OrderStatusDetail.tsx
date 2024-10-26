@@ -22,7 +22,7 @@ const OrderStatusDetail = ({ order }: Props) => {
                     <div className="flex flex-col gap-5">
                         <div className="flex gap-5 flex-col">
                             <span className="font-bold">
-                                Delivering to:{' '}
+                                Delivering to:
                                 <span className="font-normal">
                                     {order.deliveryDetails.name} , {order.deliveryDetails.addressLine1}, {order.deliveryDetails.city}
                                 </span>
